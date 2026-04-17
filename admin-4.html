@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Shahid365 — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#040411;--bg1:#07071C;--bg2:#0d0d20;--bg3:#111130;
+  --gl:rgba(255,255,255,.042);--gb:rgba(255,255,255,.08);--gb2:rgba(255,255,255,.13);
+  --a:#4F8FFF;--a2:#2D6FFF;--r:#FF5F6D;--go:#FFD166;--gr:#4ADE80;--pu:#9B7FFF;--cy:#22D3EE;
+  --t1:#fff;--t2:rgba(255,255,255,.65);--t3:rgba(255,255,255,.32);--t4:rgba(255,255,255,.14);
+  --f:'Cairo',sans-serif;--fo:'Oswald',sans-serif;
+  --sb:252px;--top:60px;
+  --s4:4px;--s8:8px;--s12:12px;--s16:16px;--s20:20px;--s24:24px;--s32:32px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--bg);color:var(--t1);overflow-x:hidden;min-height:100vh}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(79,143,255,.3);border-radius:4px}
+img{display:block;max-width:100%}
+/* GLASS */
+.gl{background:var(--gl);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--gb)}
+.gl2{background:rgba(255,255,255,.06);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid var(--gb2)}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;border:none;transition:all .2s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;line-height:1;font-family:var(--f)}
+.bp{background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;box-shadow:0 4px 16px rgba(79,143,255,.28)}.bp:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,143,255,.45)}
+.bs{background:rgba(255,255,255,.07);color:var(--t1);border:1px solid rgba(255,255,255,.12)}.bs:hover{background:rgba(255,255,255,.13)}
+.br{background:rgba(255,95,109,.14);color:var(--r);border:1px solid rgba(255,95,109,.28)}.br:hover{background:rgba(255,95,109,.24)}
+.bg{background:rgba(74,222,128,.12);color:var(--gr);border:1px solid rgba(74,222,128,.25)}.bg:hover{background:rgba(74,222,128,.22)}
+.bgo{background:rgba(255,209,102,.1);color:var(--go);border:1px solid rgba(255,209,102,.25)}.bgo:hover{background:rgba(255,209,102,.18)}
+.bpu{background:rgba(155,127,255,.12);color:var(--pu);border:1px solid rgba(155,127,255,.28)}.bpu:hover{background:rgba(155,127,255,.22)}
+.bcy{background:rgba(34,211,238,.1);color:var(--cy);border:1px solid rgba(34,211,238,.28)}
+.btn-sm{padding:6px 13px;font-size:12px;border-radius:9px}
+.btn-xs{padding:4px 10px;font-size:11px;border-radius:7px}
+.btn-icon{width:34px;height:34px;padding:0;border-radius:9px;flex-shrink:0}
+.btn:disabled{opacity:.44;pointer-events:none}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:700}
+.bb{background:rgba(79,143,255,.18);color:var(--a);border:1px solid rgba(79,143,255,.28)}
+.bg2{background:rgba(74,222,128,.14);color:var(--gr);border:1px solid rgba(74,222,128,.24)}
+.br2{background:rgba(255,95,109,.18);color:var(--r);border:1px solid rgba(255,95,109,.28)}
+.bgo2{background:rgba(255,209,102,.13);color:var(--go);border:1px solid rgba(255,209,102,.22)}
+.bpu2{background:rgba(155,127,255,.12);color:var(--pu);border:1px solid rgba(155,127,255,.22)}
+/* INPUTS */
+.inp{width:100%;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:12px;padding:11px 15px;color:var(--t1);font-size:13.5px;outline:none;transition:all .2s;resize:vertical;font-family:var(--f)}
+.inp:focus{border-color:rgba(79,143,255,.5);background:rgba(255,255,255,.085);box-shadow:0 0 0 3px rgba(79,143,255,.1)}
+.inp::placeholder{color:var(--t3)}
+.inp-label{display:block;font-size:11px;color:var(--t3);font-weight:700;letter-spacing:.7px;text-transform:uppercase;margin-bottom:6px}
+.sel{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:12px;padding:11px 15px;color:var(--t1);font-size:13.5px;outline:none;cursor:pointer;width:100%;-webkit-appearance:none;font-family:var(--f);transition:border-color .2s}
+.sel:focus{border-color:rgba(79,143,255,.5)}
+.sel option{background:#07071C;color:#fff}
+/* TOGGLE */
+.tgl{position:relative;width:46px;height:26px;background:rgba(255,255,255,.1);border-radius:999px;cursor:pointer;transition:background .28s;border:1px solid rgba(255,255,255,.13);flex-shrink:0}
+.tgl.on{background:var(--a);border-color:var(--a)}
+.tgl::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 1px 5px rgba(0,0,0,.3)}
+.tgl.on::after{transform:translateX(20px)}
+/* RANGE */
+.range{width:100%;-webkit-appearance:none;height:4px;border-radius:4px;background:rgba(255,255,255,.12);outline:none;cursor:pointer;accent-color:var(--a)}
+/* LAYOUT */
+#app-wrap{display:flex;min-height:100vh}
+#sidebar{width:var(--sb);min-height:100vh;position:fixed;top:0;bottom:0;z-index:100;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;border-radius:0;border-top:none;border-bottom:none}
+[dir="rtl"] #sidebar{right:0;border-left:1px solid rgba(255,255,255,.06);border-right:none}
+[dir="ltr"] #sidebar{left:0;border-right:1px solid rgba(255,255,255,.06);border-left:none}
+#sidebar::-webkit-scrollbar{display:none}
+#main{flex:1;display:flex;flex-direction:column;min-height:100vh}
+[dir="rtl"] #main{margin-right:var(--sb)}
+[dir="ltr"] #main{margin-left:var(--sb)}
+#topbar{height:var(--top);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(4,4,17,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-shrink:0}
+#content{flex:1;padding:28px 32px;overflow-y:visible}
+/* SIDEBAR ITEMS */
+.sb-logo{padding:20px 16px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-shrink:0}
+.sb-icon-wrap{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--a),var(--a2));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 16px rgba(79,143,255,.4);flex-shrink:0}
+.sb-title{font-family:var(--fo);font-size:17px;font-weight:700;letter-spacing:-.2px}
+.sb-section{padding:5px 12px 3px;font-size:10px;color:var(--t3);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-top:6px}
+.si{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:11px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--t2);transition:all .18s;margin:2px 10px;border:1px solid transparent;position:relative}
+.si:hover{color:var(--t1);background:rgba(79,143,255,.07)}
+.si.act{color:var(--a);background:rgba(79,143,255,.11);border-color:rgba(79,143,255,.18)}
+.si-ic{font-size:17px;flex-shrink:0;width:20px;text-align:center}
+.si-lb{flex:1}
+.si-badge{background:rgba(255,95,109,.18);color:var(--r);border:1px solid rgba(255,95,109,.28);padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700}
+.sb-foot{padding:12px;margin-top:auto;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:14px;margin-bottom:28px}
+.stat-card{border-radius:20px;padding:22px;transition:all .25s cubic-bezier(.34,1.56,.64,1);cursor:default}
+.stat-card:hover{transform:translateY(-4px)}
+/* TABLE */
+.tbl-wrap{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.07)}
+.tbl-head{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.025);flex-wrap:wrap;gap:10px}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid rgba(255,255,255,.07)}
+th{padding:11px 16px;text-align:right;font-size:10.5px;color:var(--t3);font-weight:700;letter-spacing:.7px;text-transform:uppercase;white-space:nowrap}
+[dir="ltr"] th{text-align:left}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+tbody tr:hover{background:rgba(255,255,255,.035)}
+tbody tr:last-child{border-bottom:none}
+td{padding:12px 16px;font-size:13.5px;vertical-align:middle}
+/* CARD */
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px}
+.card-hover:hover{background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.12)}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);z-index:800;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg1);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:0;width:100%;max-width:720px;margin:auto;position:relative;animation:slideUp .28s cubic-bezier(.22,1,.36,1)}
+.modal-lg{max-width:900px}
+.m-head{padding:24px 28px 18px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.m-title{font-family:var(--fo);font-size:20px;font-weight:700}
+.m-body{padding:24px 28px;overflow-y:auto;max-height:calc(85vh - 80px)}
+.m-foot{padding:18px 28px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px}
+[dir="rtl"] .m-foot{flex-direction:row-reverse}
+.m-close{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:var(--t1);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:all .18s;flex-shrink:0}
+.m-close:hover{background:rgba(255,255,255,.18)}
+/* FORM GRID */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.f2{grid-column:1/-1}
+.fg-g{display:flex;flex-direction:column;gap:16px}
+/* TMDB */
+.tmdb-res{border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;margin-top:8px;max-height:300px;overflow-y:auto;background:var(--bg2)}
+.tmdb-item{display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05)}
+.tmdb-item:last-child{border-bottom:none}
+.tmdb-item:hover{background:rgba(79,143,255,.1)}
+.tmdb-poster{width:36px;height:54px;border-radius:6px;object-fit:cover;flex-shrink:0;background:rgba(255,255,255,.07)}
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:60px;color:var(--t3);font-size:15px;gap:10px}
+.spin{width:20px;height:20px;border:2px solid rgba(79,143,255,.2);border-top-color:var(--a);border-radius:50%;animation:spin .75s linear infinite;flex-shrink:0}
+.empty{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-ic{font-size:44px;margin-bottom:14px}
+/* MISC */
+.divider{height:1px;background:rgba(255,255,255,.07);margin:16px 0}
+.info-box{background:rgba(79,143,255,.07);border:1px solid rgba(79,143,255,.18);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--t2);display:flex;gap:10px;align-items:flex-start}
+.warn-box{background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.2);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--go);display:flex;gap:10px}
+.danger-box{background:rgba(255,95,109,.07);border:1px solid rgba(255,95,109,.2);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--r);display:flex;gap:10px}
+.poster-prev{width:60px;height:88px;border-radius:9px;object-fit:cover;border:1px solid rgba(255,255,255,.12)}
+.backdrop-prev{width:120px;height:68px;border-radius:8px;object-fit:cover;border:1px solid rgba(255,255,255,.12)}
+.poster-mini{width:36px;height:52px;border-radius:7px;object-fit:cover;background:rgba(255,255,255,.07)}
+/* ORBS */
+.orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
+/* TOASTS */
+#toasts{position:fixed;top:74px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{background:rgba(20,20,40,.96);border:1px solid rgba(255,255,255,.12);color:#fff;padding:11px 22px;border-radius:20px;font-size:13.5px;backdrop-filter:blur(20px);animation:slideUp .3s both;pointer-events:all;max-width:400px;text-align:center;display:flex;align-items:center;gap:8px}
+.toast.s{border-color:rgba(74,222,128,.35);background:rgba(5,30,15,.95)}
+.toast.e{border-color:rgba(255,95,109,.35);background:rgba(30,5,10,.95)}
+.toast.w{border-color:rgba(255,209,102,.35);background:rgba(30,25,5,.95)}
+/* PROGRESS BAR */
+.progress-ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+/* SECTION TITLE */
+.page-title{font-family:var(--fo);font-size:24px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.sec-bar{width:4px;border-radius:999px;flex-shrink:0}
+/* LIVE DOT */
+.ld{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--r);animation:pd 1.8s infinite;flex-shrink:0}
+/* TREND DRAG */
+.trend-item{padding:12px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;display:flex;align-items:center;gap:12px;cursor:grab;user-select:none;transition:all .2s}
+.trend-item:hover{background:rgba(79,143,255,.07);border-color:rgba(79,143,255,.2)}
+.trend-item.dragging{opacity:.5;cursor:grabbing}
+/* ANIMS */
+@keyframes slideUp{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.au{animation:fadeUp .4s cubic-bezier(.22,1,.36,1) both}
+/* LOGIN SCREEN */
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+/* RESPONSIVE */
+@media(max-width:1100px){
+  :root{--sb:66px}
+  .sb-title,.si-lb,.si-badge,.sb-section{display:none}
+  .sb-logo{justify-content:center;padding:16px 8px}
+  .si{justify-content:center;padding:12px;margin:2px 6px}
+  .si-ic{width:auto;font-size:20px}
+  #content{padding:20px 16px}
+  .fg{grid-template-columns:1fr}
+  .fg3{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  :root{--sb:0px;--top:56px}
+  #sidebar{display:none}
+  #main{margin:0!important}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  #topbar{padding:0 16px}
+  #content{padding:16px 12px}
+  .fg,.fg3{grid-template-columns:1fr}
+  .modal{max-width:100%;margin:0}
+  .m-body{max-height:72vh}
+  .tbl-wrap{overflow-x:auto}
+  table{min-width:600px}
+}
+</style>
+</head>
+<body>
+<div class="orb" style="width:600px;height:600px;background:#1A3A8F;top:-200px;left:-100px;opacity:.13"></div>
+<div class="orb" style="width:500px;height:500px;background:#2A1A3A;bottom:-150px;right:-80px;opacity:.11"></div>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="gl2" style="border-radius:24px;padding:44px 40px;width:100%;max-width:440px;position:relative;z-index:1;animation:slideUp .5s cubic-bezier(.22,1,.36,1) both">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--a),var(--a2));display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;box-shadow:0 8px 24px rgba(79,143,255,.4)">▶</div>
+      <h1 style="font-family:var(--fo);font-size:28px;font-weight:700">SHAHID<span style="color:var(--a)">365</span></h1>
+      <p style="color:var(--t3);font-size:13px;margin-top:5px">لوحة التحكم الإدارية</p>
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="inp-label">اسم المستخدم</label>
+      <input class="inp" id="l-user" placeholder="hamouda" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div style="margin-bottom:22px">
+      <label class="inp-label">كلمة المرور</label>
+      <input class="inp" id="l-pass" type="password" placeholder="••••••••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div id="l-err" style="display:none;background:rgba(255,95,109,.1);border:1px solid rgba(255,95,109,.28);border-radius:10px;padding:10px;color:var(--r);font-size:13px;text-align:center;margin-bottom:14px"></div>
+    <button class="btn bp" style="width:100%;padding:13px;font-size:15px" id="l-btn" onclick="doLogin()">دخول →</button>
+  </div>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════════ -->
+<div id="app-wrap" style="display:none;position:relative;z-index:1">
+  <!-- SIDEBAR -->
+  <nav id="sidebar" class="gl">
+    <div class="sb-logo">
+      <div class="sb-icon-wrap">▶</div>
+      <div class="sb-title">SHAHID<span style="color:var(--a)">365</span></div>
+    </div>
+    <div class="sb-section">المحتوى</div>
+    <div class="si act" data-p="dashboard"  onclick="nav('dashboard')"> <span class="si-ic">📊</span><span class="si-lb">الرئيسية</span></div>
+    <div class="si"     data-p="movies"     onclick="nav('movies')">    <span class="si-ic">🎬</span><span class="si-lb">الأفلام</span></div>
+    <div class="si"     data-p="series"     onclick="nav('series')">    <span class="si-ic">📺</span><span class="si-lb">المسلسلات</span></div>
+    <div class="si"     data-p="channels"   onclick="nav('channels')">  <span class="si-ic">📡</span><span class="si-lb">البث المباشر</span></div>
+    <div class="si"     data-p="persons"    onclick="nav('persons')">   <span class="si-ic">🎭</span><span class="si-lb">الممثلون</span></div>
+    <div class="sb-section">التسييل</div>
+    <div class="si"     data-p="ads"        onclick="nav('ads')">       <span class="si-ic">📢</span><span class="si-lb">الإعلانات</span></div>
+    <div class="si"     data-p="subs"       onclick="nav('subs')">      <span class="si-ic">🔑</span><span class="si-lb">الاشتراكات</span></div>
+    <div class="sb-section">النظام</div>
+    <div class="si"     data-p="trending"   onclick="nav('trending')">  <span class="si-ic">🔥</span><span class="si-lb">الأكثر رواجاً</span></div>
+    <div class="si"     data-p="banned"     onclick="nav('banned')">    <span class="si-ic">🚫</span><span class="si-lb">حظر الـ IP</span></div>
+    <div class="si"     data-p="downloads"  onclick="nav('downloads')"> <span class="si-ic">⬇️</span><span class="si-lb">إعدادات التحميل</span></div>
+    <div class="si"     data-p="settings"   onclick="nav('settings')">  <span class="si-ic">⚙️</span><span class="si-lb">الإعدادات</span></div>
+    <div class="sb-foot">
+      <div class="si" onclick="logout()" style="color:var(--r)"><span class="si-ic">🚪</span><span class="si-lb">خروج</span></div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div id="main">
+    <div id="topbar">
+      <div id="top-title" style="font-family:var(--fo);font-size:18px;font-weight:700">الرئيسية</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="position:relative">
+          <span style="position:absolute;top:50%;transform:translateY(-50%);right:12px;opacity:.4;font-size:12px;pointer-events:none">🔍</span>
+          <input id="tb-q" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:7px 34px 7px 16px;color:#fff;font-size:12.5px;outline:none;width:190px;font-family:var(--f);transition:all .25s" placeholder="بحث سريع…" oninput="gSearch(this.value)"/>
+        </div>
+        <button class="btn bs btn-sm" id="lang-btn" onclick="toggleLang()">EN</button>
+        <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--a),var(--a2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;cursor:default" title="hamouda">H</div>
+      </div>
+    </div>
+    <div id="content"></div>
+  </div>
+</div>
+
+<!-- ══ MODAL ══════════════════════════════════════════════ -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal" onclick="event.stopPropagation()">
+    <div class="m-head"><div class="m-title" id="m-title">—</div><button class="m-close" onclick="closeModal()">✕</button></div>
+    <div class="m-body" id="m-body"></div>
+    <div class="m-foot" id="m-foot"></div>
+  </div>
+</div>
+<div id="toasts"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════════════
+const SB_URL  = 'https://ktkltrrvprtnvtyhmvfc.supabase.co';
+const SB_KEY  = 'sb_publishable_z-rSPdUR3d-8CnghKf9y1g_5gq1KVnU';
+const TMDB_KEY= '6235c6c495feb99e4f3d9f5681a02db5';
+const TMDB_TOK= 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MjM1YzZjNDk1ZmViOTllNGYzZDlmNTY4MWEwMmRiNSIsIm5iZiI6MTc3NjM1MzIwNC43MDQsInN1YiI6IjY5ZTBmZmI0OWU3ODNlMjVhYTJkOWU5MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.mydo5EJD10telwl1dfsv8-_ja1j5ocLkrgvCaVaNCdI';
+const ADMIN_USER='hamouda';
+const ADMIN_PASS='T9@xQ#4mL!2vZ$7pR';
+const AD_SIZES=['300x250','336x280','728x90','970x250','160x600','300x600','320x50','320x100','468x60','300x1050','250x250','200x200','custom'];
+
+// ── Supabase ─────────────────────────────────────────────
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+// ── State ────────────────────────────────────────────────
+const S = {
+  page:'dashboard', lang: localStorage.getItem('s365a_lang')||'ar',
+  tmdbLang:'ar', settings:null, _st:null
+};
+
+// ── i18n (admin only needs minimal) ──────────────────────
+const TR={ar:{save:'حفظ',cancel:'إلغاء',add:'إضافة',edit:'تعديل',del:'حذف',noData:'لا يوجد بيانات',active:'نشط',inactive:'غير نشط',yes:'نعم',no:'لا'},en:{save:'Save',cancel:'Cancel',add:'Add',edit:'Edit',del:'Delete',noData:'No data',active:'Active',inactive:'Inactive',yes:'Yes',no:'No'}};
+const t=k=>(TR[S.lang]||TR.ar)[k]||k;
+
+// ── Helpers ───────────────────────────────────────────────
+const el=id=>document.getElementById(id);
+const esc=s=>s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):'';
+const fmt=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(0)+'K':String(n||0);
+const ctr=a=>a.impressions?((a.clicks/a.impressions)*100).toFixed(1)+'%':'0%';
+const fmtDate=d=>d?new Date(d).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'}):'—';
+const isExpired=d=>d&&new Date(d)<new Date();
+
+function toast(msg,type=''){
+  const c=el('toasts'),d=document.createElement('div');
+  d.className='toast '+(type==='success'?'s':type==='error'?'e':type==='warn'?'w':'');
+  d.innerHTML=(type==='success'?'<span>✓</span>':type==='error'?'<span>✕</span>':type==='warn'?'<span>⚠</span>':'')+`<span>${esc(msg)}</span>`;
+  c.appendChild(d);
+  setTimeout(()=>{d.style.animation='none';d.style.opacity='0';d.style.transition='all .3s';setTimeout(()=>d.remove(),300)},3800);
+}
+function loading(id){el(id).innerHTML=`<div class="loading"><div class="spin"></div></div>`;}
+function setLoading(btn,state,label=''){if(btn){btn.disabled=state;if(label&&state)btn.textContent=label;}}
+function previewImg(inp,imgId){const src=el(inp)?.value?.trim(),img=el(imgId);if(!img)return;if(src){img.src=src;img.style.display='';}else img.style.display='none';}
+
+function openModal(title,body,footer='',large=false){
+  el('m-title').textContent=title;
+  el('m-body').innerHTML=body;
+  el('m-foot').innerHTML=footer;
+  el('modal').classList.toggle('modal-lg',large);
+  el('modal-bg').classList.add('open');
+}
+function closeModal(){el('modal-bg').classList.remove('open');}
+
+// ── AUTH ──────────────────────────────────────────────────
+function doLogin(){
+  const user=el('l-user').value.trim();
+  const pass=el('l-pass').value;
+  const err=el('l-err');const btn=el('l-btn');
+  err.style.display='none';
+  if(user===ADMIN_USER&&pass===ADMIN_PASS){
+    localStorage.setItem('s365a_tok','s365_admin_authenticated_2026');
+    el('login-screen').style.display='none';
+    el('app-wrap').style.display='flex';
+    applyLang();
+    loadSettings();
+    nav('dashboard');
+  }else{
+    err.textContent='بيانات الدخول غير صحيحة';err.style.display='block';
+    btn.disabled=true;setTimeout(()=>btn.disabled=false,1500);
+  }
+}
+function logout(){localStorage.removeItem('s365a_tok');location.reload();}
+function isAuthed(){return localStorage.getItem('s365a_tok')==='s365_admin_authenticated_2026';}
+
+// ── LANG ──────────────────────────────────────────────────
+function applyLang(){
+  document.documentElement.lang=S.lang;
+  document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';
+  const lb=el('lang-btn');if(lb)lb.textContent=S.lang==='ar'?'EN':'عربي';
+}
+function toggleLang(){S.lang=S.lang==='ar'?'en':'ar';localStorage.setItem('s365a_lang',S.lang);applyLang();nav(S.page);}
+
+// ── NAVIGATION ────────────────────────────────────────────
+const PAGE_LABELS={dashboard:'الرئيسية',movies:'الأفلام',series:'المسلسلات',channels:'البث المباشر',persons:'الممثلون والمخرجون',ads:'الإعلانات',subs:'الاشتراكات',trending:'الأكثر رواجاً',banned:'حظر الـ IP',downloads:'إعدادات التحميل',settings:'الإعدادات'};
+function nav(page){
+  S.page=page;
+  document.querySelectorAll('.si[data-p]').forEach(e=>e.classList.toggle('act',e.dataset.p===page));
+  const lbl=el('top-title');if(lbl)lbl.textContent=PAGE_LABELS[page]||page;
+  const map={dashboard:renderDashboard,movies:()=>renderContent('movie'),series:()=>renderContent('series'),channels:renderChannels,persons:renderPersons,ads:renderAds,subs:renderSubs,trending:renderTrending,banned:renderBanned,downloads:renderDownloads,settings:renderSettings};
+  if(map[page])map[page]();
+}
+function gSearch(q){
+  clearTimeout(S._st);if(!q.trim())return;
+  S._st=setTimeout(()=>{S.page='movies';document.querySelectorAll('.si[data-p]').forEach(e=>e.classList.toggle('act',e.dataset.p==='movies'));el('top-title').textContent=`🔍 "${q}"`;renderContent(null,q);},380);
+}
+
+// ── SETTINGS CACHE ────────────────────────────────────────
+async function loadSettings(){
+  try{const{data}=await sb.from('settings').select('*').eq('id',1).single();S.settings=data||{};}catch{}
+}
+
+// ═══════════════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════════════
+async function renderDashboard(){
+  const c=el('content');loading('content');
+  try{
+    const[{count:mv},{count:sr},{count:ch},{count:ad},{count:sb_},{data:top}]=await Promise.all([
+      sb.from('movies').select('id',{count:'exact',head:true}).eq('type','movie'),
+      sb.from('movies').select('id',{count:'exact',head:true}).eq('type','series'),
+      sb.from('channels').select('id',{count:'exact',head:true}),
+      sb.from('ads').select('id',{count:'exact',head:true}).eq('active',true),
+      sb.from('subscriptions').select('id',{count:'exact',head:true}).eq('active',true),
+      sb.from('movies').select('id,title,title_ar,poster,type,views,rating').order('views',{ascending:false}).limit(8),
+    ]);
+    c.innerHTML=`<div class="au">
+      <div class="stats-grid">
+        ${[{ic:'🎬',lb:'الأفلام',v:mv||0,c:'var(--a)',bg:'rgba(79,143,255,.1)'},{ic:'📺',lb:'المسلسلات',v:sr||0,c:'var(--go)',bg:'rgba(255,209,102,.1)'},{ic:'📡',lb:'القنوات',v:ch||0,c:'var(--gr)',bg:'rgba(74,222,128,.1)'},{ic:'📢',lb:'إعلانات نشطة',v:ad||0,c:'var(--r)',bg:'rgba(255,95,109,.1)'},{ic:'🔑',lb:'اشتراكات نشطة',v:sb_||0,c:'var(--pu)',bg:'rgba(155,127,255,.1)'}].map(s=>`
+        <div class="stat-card" style="background:${s.bg};border:1px solid ${s.c}22" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+          <div style="font-size:30px;margin-bottom:10px">${s.ic}</div>
+          <div style="font-family:var(--fo);font-size:38px;font-weight:700;color:${s.c};line-height:1">${s.v}</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:4px">${s.lb}</div>
+        </div>`).join('')}
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><span style="font-weight:700;font-size:14px">🔥 أكثر المشاهدة</span>
+          <button class="btn bp btn-sm" onclick="nav('movies')">+ إضافة فيلم</button></div>
+        <table><thead><tr><th></th><th>العنوان</th><th>النوع</th><th>التقييم</th><th>المشاهدات</th><th></th></tr></thead>
+        <tbody>${(top||[]).map(m=>`<tr>
+          <td><img src="${esc(m.poster||'')}" class="poster-mini" onerror="this.style.background='rgba(255,255,255,.1)'" alt=""/></td>
+          <td><div style="font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.title_ar||m.title||'—')}</div>
+              <div style="font-size:11.5px;color:var(--t3)">${esc(m.title||'')}</div></td>
+          <td><span class="badge ${m.type==='movie'?'bb':'bgo2'}">${m.type==='movie'?'فيلم':'مسلسل'}</span></td>
+          <td style="color:var(--go);font-weight:700">★ ${m.rating||'—'}</td>
+          <td style="color:var(--t2)">${fmt(m.views)}</td>
+          <td><button class="btn bs btn-xs" onclick="openEditMovie('${m.id}')">✎</button></td>
+        </tr>`).join('')}</tbody></table>
+      </div>
+    </div>`;
+  }catch(e){c.innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+
+// ═══════════════════════════════════════════════════════
+//  MOVIES / SERIES
+// ═══════════════════════════════════════════════════════
+async function renderContent(type,q=''){
+  const c=el('content');loading('content');
+  try{
+    let qry=sb.from('movies').select('id,type,title,title_ar,poster,year,rating,views,featured,active,created_at').order('created_at',{ascending:false}).limit(60);
+    if(type)qry=qry.eq('type',type);
+    if(q)qry=qry.or(`title.ilike.%${q}%,title_ar.ilike.%${q}%`);
+    const{data:items,error}=await qry;
+    if(error)throw error;
+    c.innerHTML=`<div class="au">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px">
+        <div class="page-title" style="margin-bottom:0"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--a),var(--a2))"></div>
+          ${type==='series'?'المسلسلات':type==='movie'?'الأفلام':'نتائج البحث'} <span style="font-size:14px;color:var(--t3);font-family:var(--f)">(${(items||[]).length})</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <div style="position:relative">
+            <span style="position:absolute;top:50%;transform:translateY(-50%);right:12px;opacity:.4;font-size:12px;pointer-events:none">🔍</span>
+            <input class="inp" style="padding:9px 34px 9px 14px;width:200px;border-radius:22px;font-size:13px" placeholder="بحث…" value="${esc(q)}"
+              oninput="clearTimeout(this._t);this._t=setTimeout(()=>renderContent('${type}',this.value),350)"/>
+          </div>
+          <button class="btn bp" onclick="openAddMovie('${type||'movie'}')">+ إضافة</button>
+        </div>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th></th><th>العنوان</th><th>السنة</th><th>التقييم</th><th>مشاهدات</th><th>مميز</th><th>نشط</th><th></th></tr></thead>
+        <tbody>${(items||[]).length?(items||[]).map(m=>`<tr>
+          <td><img src="${esc(m.poster||'')}" class="poster-mini" onerror="this.style.background='rgba(255,255,255,.1)'" alt=""/></td>
+          <td><div style="font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.title_ar||m.title||'—')}</div>
+              <div style="font-size:11.5px;color:var(--t3)">${esc(m.title||'')}</div></td>
+          <td style="color:var(--t2)">${m.year||'—'}</td>
+          <td><span style="color:var(--go);font-weight:700">★ ${m.rating||'—'}</span></td>
+          <td style="color:var(--t2)">${fmt(m.views)}</td>
+          <td><span class="badge ${m.featured?'bg2':'br2'}">${m.featured?'نعم':'لا'}</span></td>
+          <td><div class="tgl ${m.active?'on':''}" onclick="quickToggle('movies','active',${m.active},'${m.id}',this)" title="تفعيل/تعطيل"></div></td>
+          <td><div style="display:flex;gap:6px">
+            <button class="btn bs btn-xs" onclick="openEditMovie('${m.id}')">✎ تعديل</button>
+            ${m.type==='series'?`<button class="btn bgo btn-xs" onclick="openSeasons('${m.id}','${esc(m.title_ar||m.title||'')}')">📋</button>`:''}
+            <button class="btn br btn-xs" onclick="delMovie('${m.id}')">✕</button>
+          </div></td>
+        </tr>`).join(''):`<tr><td colspan="8"><div class="empty"><div class="empty-ic">🎬</div>${t('noData')}</div></td></tr>`}
+        </tbody>
+      </table></div>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+
+async function quickToggle(table,field,currentVal,id,tglEl){
+  const newVal=!currentVal;
+  try{await sb.from(table).update({[field]:newVal}).eq('id',id);tglEl.classList.toggle('on',newVal);}
+  catch(e){toast(e.message,'error');}
+}
+
+// ── Movie Form ────────────────────────────────────────────
+function movieFormHTML(m={},type='movie'){
+  const isMovie=(m.type||type)==='movie';
+  const cast=(m.cast_data||[]).map((c,i)=>`
+    <div class="cast-entry" style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <input class="inp" style="flex:1" placeholder="الاسم" value="${esc(c.name||'')}"/>
+      <input class="inp" style="flex:1" placeholder="الاسم (عربي)" value="${esc(c.name_ar||'')}"/>
+      <input class="inp" style="width:120px" placeholder="الدور" value="${esc(c.role||'')}"/>
+      <input class="inp" style="width:90px" placeholder="صورة URL" value="${esc(c.photo||'')}"/>
+      <button class="btn br btn-xs" onclick="this.closest('.cast-entry').remove()" type="button">✕</button>
+    </div>`).join('');
+  return `
+  <!-- TMDB -->
+  <div class="card" style="margin-bottom:20px;background:rgba(79,143,255,.05);border-color:rgba(79,143,255,.2)">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font-size:18px">🤖</span><span style="font-weight:700;font-size:14px">جلب من TMDB</span></div>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <input class="inp" id="tmdb-q" placeholder="${isMovie?'اسم الفيلم…':'اسم المسلسل…'}" style="flex:1" onkeydown="if(event.key==='Enter')doTmdbSearch('${type}')"/>
+      <select class="sel" id="tmdb-lang" style="width:110px"><option value="ar" ${S.tmdbLang==='ar'?'selected':''}>العربية</option><option value="en" ${S.tmdbLang==='en'?'selected':''}>English</option></select>
+      <button class="btn bp btn-sm" onclick="doTmdbSearch('${type}')">🔍 جلب</button>
+    </div>
+    <div id="tmdb-res"></div>
+  </div>
+  <div class="fg">
+    <div><label class="inp-label">العنوان (عربي) *</label><input class="inp" id="f-title_ar" value="${esc(m.title_ar||'')}" placeholder="العنوان بالعربية"/></div>
+    <div><label class="inp-label">العنوان (إنجليزي) *</label><input class="inp" id="f-title" value="${esc(m.title||'')}" placeholder="English title"/></div>
+    <div><label class="inp-label">العنوان الأصلي</label><input class="inp" id="f-orig_title" value="${esc(m.orig_title||'')}"/></div>
+    <div><label class="inp-label">النوع</label>
+      <select class="sel" id="f-type">
+        <option value="movie" ${(m.type||type)==='movie'?'selected':''}>🎬 فيلم</option>
+        <option value="series" ${(m.type||type)==='series'?'selected':''}>📺 مسلسل</option>
+      </select>
+    </div>
+    <div><label class="inp-label">السنة</label><input class="inp" id="f-year" type="number" value="${m.year||''}" placeholder="2026"/></div>
+    <div><label class="inp-label">التقييم (0-10)</label><input class="inp" id="f-rating" type="number" step=".1" min="0" max="10" value="${m.rating||''}" placeholder="8.5"/></div>
+    <div><label class="inp-label">المدة (دقيقة)</label><input class="inp" id="f-duration" type="number" value="${m.duration||''}" placeholder="120"/></div>
+    <div><label class="inp-label">اللغة</label>
+      <select class="sel" id="f-language">${['ar','en','fr','tr','ko','ja','es','other'].map(l=>`<option value="${l}" ${(m.language||'ar')===l?'selected':''}>${l.toUpperCase()}</option>`).join('')}</select>
+    </div>
+    <div class="f2"><label class="inp-label">التصنيفات (EN) — مفصولة بفاصلة</label><input class="inp" id="f-genres" value="${esc((m.genres||[]).join(', '))}" placeholder="Action, Drama, Thriller"/></div>
+    <div class="f2"><label class="inp-label">التصنيفات (عربي)</label><input class="inp" id="f-genres_ar" value="${esc((m.genres_ar||[]).join(', '))}" placeholder="أكشن, دراما, إثارة"/></div>
+    <div class="f2"><label class="inp-label">الوصف (عربي)</label><textarea class="inp" id="f-description_ar" rows="3" placeholder="الوصف بالعربية…">${esc(m.description_ar||'')}</textarea></div>
+    <div class="f2"><label class="inp-label">الوصف (إنجليزي)</label><textarea class="inp" id="f-description" rows="3" placeholder="English description…">${esc(m.description||'')}</textarea></div>
+    <div class="f2"><label class="inp-label">رابط الملصق (Poster)</label>
+      <input class="inp" id="f-poster" value="${esc(m.poster||'')}" placeholder="https://…" oninput="previewImg('f-poster','pv-poster')"/>
+      <div style="margin-top:8px;display:flex;gap:10px;align-items:center">
+        <img id="pv-poster" class="poster-prev" src="${m.poster||''}" style="${m.poster?'':'display:none'}" onerror="this.style.display='none'" alt=""/>
+        <span style="font-size:12px;color:var(--t3)">معاينة</span>
+      </div>
+    </div>
+    <div class="f2"><label class="inp-label">رابط الخلفية (Backdrop)</label>
+      <input class="inp" id="f-backdrop" value="${esc(m.backdrop||'')}" placeholder="https://…" oninput="previewImg('f-backdrop','pv-backdrop')"/>
+      <div style="margin-top:8px"><img id="pv-backdrop" class="backdrop-prev" src="${m.backdrop||''}" style="${m.backdrop?'':'display:none'}" onerror="this.style.display='none'" alt=""/></div>
+    </div>
+    ${isMovie?`
+    <div class="f2"><label class="inp-label">رابط الفيديو (MP4 / HLS .m3u8 / YouTube)</label><input class="inp" id="f-video_url" value="${esc(m.video_url||'')}" placeholder="https://…"/></div>
+    <div><label class="inp-label">رابط التحميل</label><input class="inp" id="f-dl_url" value="${esc(m.dl_url||'')}" placeholder="https://…"/></div>
+    <div><label class="inp-label">رابط الإعلان (Trailer)</label><input class="inp" id="f-trailer_url" value="${esc(m.trailer_url||'')}" placeholder="https://youtube.com/…"/></div>
+    `:`
+    <div class="f2"><label class="inp-label">رابط الإعلان (Trailer)</label><input class="inp" id="f-trailer_url" value="${esc(m.trailer_url||'')}" placeholder="https://youtube.com/…"/></div>
+    `}
+    <div class="f2"><label class="inp-label">رابط ملف الترجمة (SRT/VTT)</label><input class="inp" id="f-subtitle_url" value="${esc(m.subtitle_url||'')}" placeholder="https://… .vtt"/></div>
+    <div><label class="inp-label">المخرج (EN)</label><input class="inp" id="f-director_name" value="${esc(m.director_name||'')}"/></div>
+    <div><label class="inp-label">المخرج (عربي)</label><input class="inp" id="f-director_name_ar" value="${esc(m.director_name_ar||'')}"/></div>
+  </div>
+  <!-- CAST -->
+  <div style="margin-top:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <label class="inp-label" style="margin:0">طاقم التمثيل</label>
+      <button class="btn bp btn-xs" onclick="addCastRow()" type="button">+ إضافة ممثل</button>
+    </div>
+    <div id="cast-cont">${cast}</div>
+  </div>
+  <!-- FEATURED & ACTIVE -->
+  <div style="display:flex;gap:16px;margin-top:18px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.07);flex:1">
+      <div class="tgl ${m.featured?'on':''}" id="f-featured" onclick="this.classList.toggle('on')"></div>
+      <span style="font-size:13.5px;font-weight:600">مميز على الصفحة الرئيسية</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.07);flex:1">
+      <div class="tgl ${m.active!==false?'on':''}" id="f-active" onclick="this.classList.toggle('on')"></div>
+      <span style="font-size:13.5px;font-weight:600">نشط (ظاهر للمستخدمين)</span>
+    </div>
+  </div>`;
+}
+
+function addCastRow(){
+  const cont=el('cast-cont');
+  const div=document.createElement('div');div.className='cast-entry';
+  div.style.cssText='display:flex;gap:8px;align-items:center;margin-bottom:8px';
+  div.innerHTML=`<input class="inp" style="flex:1" placeholder="الاسم"/><input class="inp" style="flex:1" placeholder="الاسم (عربي)"/><input class="inp" style="width:120px" placeholder="الدور"/><input class="inp" style="width:90px" placeholder="صورة URL"/><button class="btn br btn-xs" onclick="this.closest('.cast-entry').remove()" type="button">✕</button>`;
+  cont.appendChild(div);
+}
+
+function collectMovieForm(){
+  const castData=[...document.querySelectorAll('.cast-entry')].map(r=>{
+    const ins=r.querySelectorAll('input');
+    return{name:ins[0]?.value?.trim()||'',name_ar:ins[1]?.value?.trim()||'',role:ins[2]?.value?.trim()||'',photo:ins[3]?.value?.trim()||''};
+  }).filter(c=>c.name||c.name_ar);
+  return{
+    title:          el('f-title')?.value?.trim()||'',
+    title_ar:       el('f-title_ar')?.value?.trim()||'',
+    orig_title:     el('f-orig_title')?.value?.trim()||'',
+    description:    el('f-description')?.value?.trim()||'',
+    description_ar: el('f-description_ar')?.value?.trim()||'',
+    poster:         el('f-poster')?.value?.trim()||'',
+    backdrop:       el('f-backdrop')?.value?.trim()||'',
+    year:           +el('f-year')?.value||null,
+    duration:       +el('f-duration')?.value||null,
+    rating:         parseFloat(el('f-rating')?.value)||null,
+    language:       el('f-language')?.value||'ar',
+    type:           el('f-type')?.value||'movie',
+    genres:         (el('f-genres')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+    genres_ar:      (el('f-genres_ar')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+    video_url:      el('f-video_url')?.value?.trim()||null,
+    dl_url:         el('f-dl_url')?.value?.trim()||null,
+    trailer_url:    el('f-trailer_url')?.value?.trim()||null,
+    subtitle_url:   el('f-subtitle_url')?.value?.trim()||null,
+    director_name:  el('f-director_name')?.value?.trim()||null,
+    director_name_ar:el('f-director_name_ar')?.value?.trim()||null,
+    featured:       el('f-featured')?.classList.contains('on')||false,
+    active:         el('f-active')?.classList.contains('on')!==false,
+    cast_data:      castData,
+    updated_at:     new Date().toISOString(),
+  };
+}
+
+function openAddMovie(type='movie'){
+  openModal(`+ إضافة ${type==='movie'?'فيلم':'مسلسل'}`,movieFormHTML({},type),
+    `<button class="btn bp" onclick="saveMovie(null,'${type}')">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`,true);
+}
+
+async function openEditMovie(id){
+  openModal('تعديل المحتوى',`<div class="loading"><div class="spin"></div></div>`,'',true);
+  try{
+    const{data:m,error}=await sb.from('movies').select('*').eq('id',id).single();
+    if(error)throw error;
+    el('m-body').innerHTML=movieFormHTML(m,m.type);
+    el('m-foot').innerHTML=`<button class="btn bp" onclick="saveMovie('${id}','${m.type}')">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`;
+  }catch(e){toast(e.message,'error');closeModal();}
+}
+
+async function saveMovie(id,type){
+  const data=collectMovieForm();
+  if(!data.title_ar&&!data.title){toast('العنوان مطلوب','error');return;}
+  const btn=el('m-foot')?.querySelector('.bp');
+  setLoading(btn,true,'جارٍ الحفظ…');
+  try{
+    if(id){
+      const{error}=await sb.from('movies').update(data).eq('id',id);
+      if(error)throw error;
+    }else{
+      const{error}=await sb.from('movies').insert([{...data,created_at:new Date().toISOString()}]);
+      if(error)throw error;
+    }
+    toast(id?'تم التحديث ✓':'تمت الإضافة ✓','success');
+    closeModal();nav(S.page);
+  }catch(e){toast(e.message,'error');}
+  setLoading(btn,false,'💾 حفظ');
+}
+
+async function delMovie(id){
+  if(!confirm('هل تريد حذف هذا المحتوى نهائياً؟'))return;
+  try{
+    const{error}=await sb.from('movies').delete().eq('id',id);
+    if(error)throw error;
+    toast('تم الحذف ✓','success');nav(S.page);
+  }catch(e){toast(e.message,'error');}
+}
+
+// ── TMDB ─────────────────────────────────────────────────
+async function doTmdbSearch(type){
+  const q=el('tmdb-q')?.value?.trim();
+  const lng=el('tmdb-lang')?.value||'ar';
+  S.tmdbLang=lng;
+  if(!q)return;
+  el('tmdb-res').innerHTML=`<div style="padding:10px;color:var(--t3);font-size:13px;display:flex;align-items:center;gap:8px"><div class="spin"></div> جارٍ البحث…</div>`;
+  try{
+    const tl=lng==='ar'?'ar-SA':'en-US';
+    const r=await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(q)}&language=${tl}&include_adult=false`,{headers:{Authorization:'Bearer '+TMDB_TOK}});
+    const d=await r.json();
+    const results=(d.results||[]).filter(x=>['movie','tv'].includes(x.media_type)).slice(0,12);
+    if(!results.length){el('tmdb-res').innerHTML=`<div style="padding:12px;color:var(--t3);font-size:13px">لا توجد نتائج</div>`;return;}
+    el('tmdb-res').innerHTML=`<div class="tmdb-res">${results.map(r=>`
+      <div class="tmdb-item" onclick="fillTmdb(${r.id},'${r.media_type||type}','${lng}')">
+        ${r.poster_path?`<img class="tmdb-poster" src="https://image.tmdb.org/t/p/w92${r.poster_path}" loading="lazy" onerror="this.style.display='none'">`:`<div class="tmdb-poster" style="display:flex;align-items:center;justify-content:center;font-size:20px">🎬</div>`}
+        <div><div style="font-weight:600;font-size:13.5px">${esc(r.title||r.name||'')}</div>
+          <div style="font-size:12px;color:var(--t3);margin-top:2px">${(r.release_date||r.first_air_date||'').split('-')[0]||''} ${r.vote_average?'• ★'+r.vote_average.toFixed(1):''}</div></div>
+      </div>`).join('')}</div>`;
+  }catch(e){el('tmdb-res').innerHTML=`<div style="padding:10px;color:var(--r);font-size:13px">${e.message}</div>`;}
+}
+
+async function fillTmdb(tmdbId,mtype,lang){
+  el('tmdb-res').innerHTML=`<div style="padding:10px;color:var(--t3);font-size:13px;display:flex;align-items:center;gap:8px"><div class="spin"></div> جارٍ جلب التفاصيل…</div>`;
+  try{
+    const tl=lang==='ar'?'ar-SA':'en-US';
+    const mt=mtype==='tv'?'tv':'movie';
+    const r=await fetch(`https://api.themoviedb.org/3/${mt}/${tmdbId}?api_key=${TMDB_KEY}&language=${tl}&append_to_response=credits,videos`,{headers:{Authorization:'Bearer '+TMDB_TOK}});
+    const d=await r.json();
+    const trailer=(d.videos?.results||[]).find(v=>v.type==='Trailer'&&v.site==='YouTube');
+    const dir=(d.credits?.crew||[]).find(c=>c.job==='Director');
+    // Fill fields
+    const setV=(id,v)=>{const e=el(id);if(e)e.value=v||'';};
+    setV('f-title',d.title||d.name||'');
+    setV('f-orig_title',d.original_title||d.original_name||'');
+    setV('f-year',parseInt((d.release_date||d.first_air_date||'').split('-')[0])||'');
+    setV('f-rating',d.vote_average?d.vote_average.toFixed(1):'');
+    setV('f-duration',d.runtime||d.episode_run_time?.[0]||'');
+    if(el('f-language'))el('f-language').value=d.original_language||'ar';
+    if(el('f-poster')){el('f-poster').value=d.poster_path?`https://image.tmdb.org/t/p/w500${d.poster_path}`:'';previewImg('f-poster','pv-poster');}
+    if(el('f-backdrop')){el('f-backdrop').value=d.backdrop_path?`https://image.tmdb.org/t/p/w1280${d.backdrop_path}`:'';previewImg('f-backdrop','pv-backdrop');}
+    if(el('f-trailer_url'))el('f-trailer_url').value=trailer?`https://www.youtube.com/watch?v=${trailer.key}`:'';
+    if(dir){setV('f-director_name',dir.name||'');}
+    if(lang==='ar'){
+      setV('f-description_ar',d.overview||'');
+      if(el('f-genres_ar'))el('f-genres_ar').value=(d.genres||[]).map(g=>g.name).join(', ');
+    }else{
+      setV('f-description',d.overview||'');
+      if(el('f-genres'))el('f-genres').value=(d.genres||[]).map(g=>g.name).join(', ');
+    }
+    // Cast
+    const cont=el('cast-cont');
+    if(cont){
+      cont.innerHTML='';
+      (d.credits?.cast||[]).slice(0,15).forEach(c=>{
+        const div=document.createElement('div');div.className='cast-entry';
+        div.style.cssText='display:flex;gap:8px;align-items:center;margin-bottom:8px';
+        div.innerHTML=`<input class="inp" style="flex:1" placeholder="الاسم" value="${esc(c.name||'')}"/><input class="inp" style="flex:1" placeholder="الاسم (عربي)" value=""/><input class="inp" style="width:120px" placeholder="الدور" value="${esc(c.character||'')}"/><input class="inp" style="width:90px" placeholder="صورة" value="${c.profile_path?`https://image.tmdb.org/t/p/w200${c.profile_path}`:''}"/><button class="btn br btn-xs" onclick="this.closest('.cast-entry').remove()" type="button">✕</button>`;
+        cont.appendChild(div);
+      });
+    }
+    el('tmdb-res').innerHTML=`<div style="padding:10px 12px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:9px;color:var(--gr);font-size:13px">✓ تم جلب البيانات — يمكنك تعديل أي حقل قبل الحفظ.</div>`;
+  }catch(e){el('tmdb-res').innerHTML=`<div style="padding:10px;color:var(--r);font-size:13px">${e.message}</div>`;}
+}
+
+// ═══════════════════════════════════════════════════════
+//  SEASONS & EPISODES
+// ═══════════════════════════════════════════════════════
+async function openSeasons(movieId,movieTitle){
+  openModal(`📋 ${movieTitle} — المواسم`,`<div class="loading"><div class="spin"></div></div>`,'',true);
+  await reloadSeasons(movieId);
+}
+
+async function reloadSeasons(movieId){
+  try{
+    const{data:seasons,error}=await sb.from('seasons').select('*').eq('movie_id',movieId).order('season_number');
+    if(error)throw error;
+    el('m-foot').innerHTML=`<button class="btn bp" onclick="openAddSeason('${movieId}')">+ إضافة موسم</button><button class="btn bs" onclick="closeModal()">إغلاق</button>`;
+    el('m-body').innerHTML=seasons?.length?seasons.map(s=>`
+      <div class="card card-hover" style="margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div>
+            <div style="font-weight:700;font-size:15px">الموسم ${s.season_number} — ${esc(s.title_ar||s.title||'')}</div>
+          </div>
+          <div style="display:flex;gap:7px">
+            <button class="btn bgo btn-xs" onclick="openEpisodes('${s.id}',${s.season_number},'${movieId}')">📋 حلقات</button>
+            <button class="btn bs btn-xs" onclick="editSeason('${s.id}','${movieId}')">✎</button>
+            <button class="btn br btn-xs" onclick="delSeason('${s.id}','${movieId}')">✕</button>
+          </div>
+        </div>
+      </div>`).join('')
+    :`<div class="empty"><div class="empty-ic">📺</div>${t('noData')}</div>`;
+  }catch(e){toast(e.message,'error');}
+}
+
+function seasonFormHTML(s={}){return `<div class="fg">
+  <div><label class="inp-label">رقم الموسم *</label><input class="inp" id="s-n" type="number" min="1" value="${s.season_number||''}"/></div>
+  <div><label class="inp-label">العنوان (عربي)</label><input class="inp" id="s-title_ar" value="${esc(s.title_ar||'')}"/></div>
+  <div class="f2"><label class="inp-label">العنوان (إنجليزي)</label><input class="inp" id="s-title" value="${esc(s.title||'')}"/></div>
+  <div class="f2"><label class="inp-label">رابط الملصق</label><input class="inp" id="s-poster" value="${esc(s.poster||'')}" placeholder="https://…"/></div>
+</div>`;}
+
+function openAddSeason(movieId){
+  openModal('+ إضافة موسم',seasonFormHTML(),
+    `<button class="btn bp" onclick="saveSeason(null,'${movieId}')">💾 حفظ</button><button class="btn bs" onclick="openSeasons('${movieId}','')">← رجوع</button>`);
+}
+async function editSeason(id,movieId){
+  const{data:s}=await sb.from('seasons').select('*').eq('id',id).single();
+  openModal('تعديل الموسم',seasonFormHTML(s||{}),
+    `<button class="btn bp" onclick="saveSeason('${id}','${movieId}')">💾 حفظ</button><button class="btn bs" onclick="openSeasons('${movieId}','')">← رجوع</button>`);
+}
+async function saveSeason(id,movieId){
+  const data={season_number:+el('s-n')?.value||1,title_ar:el('s-title_ar')?.value?.trim(),title:el('s-title')?.value?.trim(),poster:el('s-poster')?.value?.trim(),movie_id:movieId};
+  try{
+    if(id){const{e}=await sb.from('seasons').update(data).eq('id',id);if(e)throw e;}
+    else{const{e}=await sb.from('seasons').insert([data]);if(e)throw e;}
+    toast('تم الحفظ ✓','success');openSeasons(movieId,'');
+  }catch(e){toast(e.message,'error');}
+}
+async function delSeason(id,movieId){
+  if(!confirm('حذف الموسم وجميع حلقاته؟'))return;
+  try{
+    await sb.from('episodes').delete().eq('season_id',id);
+    const{error}=await sb.from('seasons').delete().eq('id',id);
+    if(error)throw error;
+    toast('تم الحذف ✓','success');openSeasons(movieId,'');
+  }catch(e){toast(e.message,'error');}
+}
+
+async function openEpisodes(seasonId,seasonN,movieId){
+  openModal(`📋 حلقات الموسم ${seasonN}`,`<div class="loading"><div class="spin"></div></div>`,'',true);
+  await reloadEpisodes(seasonId,seasonN,movieId);
+}
+async function reloadEpisodes(seasonId,seasonN,movieId){
+  try{
+    const{data:eps,error}=await sb.from('episodes').select('*').eq('season_id',seasonId).order('episode_number');
+    if(error)throw error;
+    el('m-foot').innerHTML=`<button class="btn bp" onclick="openAddEpisode('${seasonId}','${seasonN}','${movieId}')">+ إضافة حلقة</button><button class="btn bs btn-sm" onclick="openSeasons('${movieId}','')">← المواسم</button>`;
+    el('m-body').innerHTML=eps?.length?`<div style="display:flex;flex-direction:column;gap:9px">
+      ${eps.map(ep=>`
+      <div class="card" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        ${ep.thumbnail?`<img src="${esc(ep.thumbnail)}" style="width:72px;height:42px;border-radius:7px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'">`:`<div style="width:72px;height:42px;border-radius:7px;background:rgba(255,255,255,.07);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px">▶</div>`}
+        <div style="flex:1;overflow:hidden">
+          <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">ح${ep.episode_number} — ${esc(ep.title_ar||ep.title||'')}</div>
+          <div style="font-size:12px;color:var(--t3)">${ep.duration?ep.duration+' دق':''}${ep.release_date?' • '+ep.release_date:''}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button class="btn bs btn-xs" onclick="openEditEpisode('${ep.id}','${seasonId}','${seasonN}','${movieId}')">✎</button>
+          <button class="btn br btn-xs" onclick="delEpisode('${ep.id}','${seasonId}','${seasonN}','${movieId}')">✕</button>
+        </div>
+      </div>`).join('')}</div>`
+    :`<div class="empty"><div class="empty-ic">🎬</div>${t('noData')}</div>`;
+  }catch(e){toast(e.message,'error');}
+}
+
+function episodeFormHTML(ep={}){return `<div class="fg">
+  <div><label class="inp-label">رقم الحلقة *</label><input class="inp" id="ep-n" type="number" min="1" value="${ep.episode_number||''}"/></div>
+  <div><label class="inp-label">المدة (دقيقة)</label><input class="inp" id="ep-dur" type="number" value="${ep.duration||''}"/></div>
+  <div><label class="inp-label">العنوان (عربي)</label><input class="inp" id="ep-title_ar" value="${esc(ep.title_ar||'')}"/></div>
+  <div><label class="inp-label">العنوان (إنجليزي)</label><input class="inp" id="ep-title" value="${esc(ep.title||'')}"/></div>
+  <div class="f2"><label class="inp-label">رابط الفيديو *</label><input class="inp" id="ep-video_url" value="${esc(ep.video_url||'')}" placeholder="https://…"/></div>
+  <div class="f2"><label class="inp-label">رابط التحميل</label><input class="inp" id="ep-dl_url" value="${esc(ep.dl_url||'')}" placeholder="https://…"/></div>
+  <div class="f2"><label class="inp-label">رابط الترجمة (SRT/VTT)</label><input class="inp" id="ep-subtitle_url" value="${esc(ep.subtitle_url||'')}" placeholder="https://…"/></div>
+  <div class="f2"><label class="inp-label">الصورة المصغرة (Thumbnail)</label><input class="inp" id="ep-thumbnail" value="${esc(ep.thumbnail||'')}" placeholder="https://…"/></div>
+  <div><label class="inp-label">تاريخ البث</label><input class="inp" id="ep-date" type="date" value="${ep.release_date||''}"/></div>
+  <div class="f2"><label class="inp-label">الوصف</label><textarea class="inp" id="ep-desc" rows="2">${esc(ep.description||'')}</textarea></div>
+</div>`;}
+
+function openAddEpisode(seasonId,seasonN,movieId){
+  openModal('+ إضافة حلقة',episodeFormHTML(),
+    `<button class="btn bp" onclick="saveEpisode(null,'${seasonId}','${seasonN}','${movieId}')">💾 حفظ</button><button class="btn bs" onclick="openEpisodes('${seasonId}','${seasonN}','${movieId}')">← رجوع</button>`);
+}
+async function openEditEpisode(id,seasonId,seasonN,movieId){
+  const{data:ep}=await sb.from('episodes').select('*').eq('id',id).single();
+  openModal('تعديل الحلقة',episodeFormHTML(ep||{}),
+    `<button class="btn bp" onclick="saveEpisode('${id}','${seasonId}','${seasonN}','${movieId}')">💾 حفظ</button><button class="btn bs" onclick="openEpisodes('${seasonId}','${seasonN}','${movieId}')">← رجوع</button>`);
+}
+async function saveEpisode(id,seasonId,seasonN,movieId){
+  const data={episode_number:+el('ep-n')?.value||1,title_ar:el('ep-title_ar')?.value?.trim(),title:el('ep-title')?.value?.trim(),video_url:el('ep-video_url')?.value?.trim(),dl_url:el('ep-dl_url')?.value?.trim(),subtitle_url:el('ep-subtitle_url')?.value?.trim(),thumbnail:el('ep-thumbnail')?.value?.trim(),duration:+el('ep-dur')?.value||null,release_date:el('ep-date')?.value||null,description:el('ep-desc')?.value?.trim(),season_id:seasonId,movie_id:movieId};
+  try{
+    if(id){const{e}=await sb.from('episodes').update(data).eq('id',id);if(e)throw e;}
+    else{const{e}=await sb.from('episodes').insert([data]);if(e)throw e;}
+    toast('تم الحفظ ✓','success');openEpisodes(seasonId,seasonN,movieId);
+  }catch(e){toast(e.message,'error');}
+}
+async function delEpisode(id,seasonId,seasonN,movieId){
+  if(!confirm('حذف الحلقة؟'))return;
+  try{await sb.from('episodes').delete().eq('id',id);toast('تم الحذف ✓','success');openEpisodes(seasonId,seasonN,movieId);}
+  catch(e){toast(e.message,'error');}
+}
+
+// ═══════════════════════════════════════════════════════
+//  CHANNELS
+// ═══════════════════════════════════════════════════════
+async function renderChannels(){
+  const c=el('content');loading('content');
+  try{
+    const{data,error}=await sb.from('channels').select('*').order('sort_order').order('created_at',{ascending:false});
+    if(error)throw error;
+    c.innerHTML=`<div class="au">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px">
+        <div class="page-title" style="margin-bottom:0"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--a),var(--a2))"></div>البث المباشر (${(data||[]).length})</div>
+        <button class="btn bp" onclick="openAddChannel()">+ إضافة قناة</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px">
+        ${(data||[]).length?(data||[]).map(ch=>`
+        <div class="card card-hover">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+            <div style="display:flex;align-items:center;gap:10px;flex:1;overflow:hidden">
+              ${ch.logo?`<img src="${esc(ch.logo)}" style="width:44px;height:44px;border-radius:9px;object-fit:contain;background:rgba(255,255,255,.08);padding:3px;flex-shrink:0" onerror="this.style.display='none'">`:'<span style="font-size:30px;flex-shrink:0">📺</span>'}
+              <div style="overflow:hidden"><div style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ch.name_ar||ch.name||'—')}</div><div style="font-size:12px;color:var(--t3)">${esc(ch.name||'')}</div></div>
+            </div>
+            <span class="badge ${ch.active?'bg2':'br2'}">${ch.active?'نشط':'متوقف'}</span>
+          </div>
+          ${ch.category?`<span class="badge bb" style="margin-bottom:8px">${esc(ch.category_ar||ch.category)}</span>`:''}
+          <div style="font-size:11px;color:var(--t3);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:10px">${esc((ch.stream_url||'').slice(0,50))}…</div>
+          <div style="display:flex;gap:7px">
+            <button class="btn bs btn-sm" style="flex:1;justify-content:center" onclick="openEditChannel('${ch.id}')">✎ تعديل</button>
+            <button class="btn br btn-sm" onclick="delChannel('${ch.id}')">✕</button>
+          </div>
+        </div>`).join(''):`<div class="empty" style="grid-column:1/-1"><div class="empty-ic">📡</div>${t('noData')}</div>`}
+      </div>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+
+function channelFormHTML(ch={}){return `<div class="fg">
+  <div><label class="inp-label">الاسم (إنجليزي) *</label><input class="inp" id="c-name" value="${esc(ch.name||'')}"/></div>
+  <div><label class="inp-label">الاسم (عربي)</label><input class="inp" id="c-name_ar" value="${esc(ch.name_ar||'')}"/></div>
+  <div class="f2"><label class="inp-label">رابط البث * (HLS .m3u8 أو YouTube)</label><input class="inp" id="c-stream_url" value="${esc(ch.stream_url||'')}" placeholder="https://…"/></div>
+  <div class="f2"><label class="inp-label">رابط الشعار (Logo)</label>
+    <input class="inp" id="c-logo" value="${esc(ch.logo||'')}" placeholder="https://…" oninput="previewImg('c-logo','pv-logo')"/>
+    <div style="margin-top:6px">${ch.logo?`<img id="pv-logo" src="${ch.logo}" style="height:44px;width:44px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,.08);padding:2px">`:`<img id="pv-logo" style="display:none"/>`}</div>
+  </div>
+  <div><label class="inp-label">التصنيف (EN)</label><input class="inp" id="c-cat" value="${esc(ch.category||'')}"/></div>
+  <div><label class="inp-label">التصنيف (عربي)</label><input class="inp" id="c-cat_ar" value="${esc(ch.category_ar||'')}"/></div>
+  <div><label class="inp-label">الترتيب</label><input class="inp" id="c-order" type="number" value="${ch.sort_order||0}"/></div>
+  <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid rgba(255,255,255,.07)">
+    <div class="tgl ${ch.active!==false?'on':''}" id="c-active" onclick="this.classList.toggle('on')"></div>
+    <span style="font-size:13px;font-weight:600">نشط</span>
+  </div>
+</div>`;}
+
+function openAddChannel(){openModal('+ إضافة قناة',channelFormHTML(),`<button class="btn bp" onclick="saveChannel(null)">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`);}
+async function openEditChannel(id){
+  const{data:ch}=await sb.from('channels').select('*').eq('id',id).single();
+  openModal('تعديل القناة',channelFormHTML(ch||{}),`<button class="btn bp" onclick="saveChannel('${id}')">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`);
+}
+async function saveChannel(id){
+  const data={name:el('c-name')?.value?.trim(),name_ar:el('c-name_ar')?.value?.trim(),stream_url:el('c-stream_url')?.value?.trim(),logo:el('c-logo')?.value?.trim(),category:el('c-cat')?.value?.trim(),category_ar:el('c-cat_ar')?.value?.trim(),sort_order:+el('c-order')?.value||0,active:el('c-active')?.classList.contains('on')};
+  if(!data.name||!data.stream_url){toast('الاسم والرابط مطلوبان','error');return;}
+  try{
+    if(id){await sb.from('channels').update(data).eq('id',id);}
+    else{await sb.from('channels').insert([data]);}
+    toast('تم الحفظ ✓','success');closeModal();renderChannels();
+  }catch(e){toast(e.message,'error');}
+}
+async function delChannel(id){
+  if(!confirm('حذف القناة؟'))return;
+  try{await sb.from('channels').delete().eq('id',id);toast('تم الحذف ✓','success');renderChannels();}
+  catch(e){toast(e.message,'error');}
+}
+
+// ═══════════════════════════════════════════════════════
+//  PERSONS
+// ═══════════════════════════════════════════════════════
+async function renderPersons(){
+  const c=el('content');loading('content');
+  try{
+    const{data,error}=await sb.from('persons').select('*').order('created_at',{ascending:false}).limit(100);
+    if(error)throw error;
+    c.innerHTML=`<div class="au">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px">
+        <div class="page-title" style="margin-bottom:0"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--a),var(--a2))"></div>الممثلون والمخرجون (${(data||[]).length})</div>
+        <button class="btn bp" onclick="openAddPerson()">+ إضافة</button>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>الصورة</th><th>الاسم</th><th>الاسم (عربي)</th><th></th></tr></thead>
+        <tbody>${(data||[]).length?(data||[]).map(p=>`<tr>
+          <td><img src="${esc(p.photo||'')}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.07)" onerror="this.style.background='rgba(255,255,255,.1)'" alt=""/></td>
+          <td style="font-weight:600">${esc(p.name||'—')}</td>
+          <td style="color:var(--t2)">${esc(p.name_ar||'—')}</td>
+          <td><div style="display:flex;gap:6px">
+            <button class="btn bs btn-xs" onclick="openEditPerson('${p.id}')">✎ تعديل</button>
+            <button class="btn bpu btn-xs" onclick="viewPersonWorks('${p.id}','${esc(p.name_ar||p.name||'')}')">🎬 أعماله</button>
+            <button class="btn br btn-xs" onclick="delPerson('${p.id}')">✕</button>
+          </div></td>
+        </tr>`).join(''):`<tr><td colspan="4"><div class="empty"><div class="empty-ic">🎭</div>${t('noData')}</div></td></tr>`}
+        </tbody>
+      </table></div>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+
+function personFormHTML(p={}){return `<div class="fg">
+  <div><label class="inp-label">الاسم *</label><input class="inp" id="p-name" value="${esc(p.name||'')}"/></div>
+  <div><label class="inp-label">الاسم (عربي)</label><input class="inp" id="p-name_ar" value="${esc(p.name_ar||'')}"/></div>
+  <div class="f2"><label class="inp-label">رابط الصورة</label>
+    <input class="inp" id="p-photo" value="${esc(p.photo||'')}" placeholder="https://…" oninput="previewImg('p-photo','pv-person')"/>
+    <div style="margin-top:8px"><img id="pv-person" src="${p.photo||''}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;${p.photo?'':'display:none'}" onerror="this.style.display='none'"/></div>
+  </div>
+  <div class="f2"><label class="inp-label">السيرة الذاتية (EN)</label><textarea class="inp" id="p-bio" rows="3">${esc(p.bio||'')}</textarea></div>
+  <div class="f2"><label class="inp-label">السيرة الذاتية (عربي)</label><textarea class="inp" id="p-bio_ar" rows="3">${esc(p.bio_ar||'')}</textarea></div>
+</div>`;}
+
+function openAddPerson(){openModal('+ إضافة ممثل/مخرج',personFormHTML(),`<button class="btn bp" onclick="savePerson(null)">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`);}
+async function openEditPerson(id){
+  const{data:p}=await sb.from('persons').select('*').eq('id',id).single();
+  openModal('تعديل',personFormHTML(p||{}),`<button class="btn bp" onclick="savePerson('${id}')">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`);
+}
+async function savePerson(id){
+  const data={name:el('p-name')?.value?.trim(),name_ar:el('p-name_ar')?.value?.trim(),photo:el('p-photo')?.value?.trim(),bio:el('p-bio')?.value?.trim(),bio_ar:el('p-bio_ar')?.value?.trim()};
+  if(!data.name){toast('الاسم مطلوب','error');return;}
+  try{
+    if(id){await sb.from('persons').update(data).eq('id',id);}
+    else{await sb.from('persons').insert([{...data,created_at:new Date().toISOString()}]);}
+    toast('تم الحفظ ✓','success');closeModal();renderPersons();
+  }catch(e){toast(e.message,'error');}
+}
+async function delPerson(id){
+  if(!confirm('حذف؟'))return;
+  try{await sb.from('persons').delete().eq('id',id);toast('تم الحذف ✓','success');renderPersons();}catch(e){toast(e.message,'error');}
+}
+async function viewPersonWorks(id,name){
+  openModal(`🎬 أعمال ${name}`,`<div class="loading"><div class="spin"></div></div>`,`<button class="btn bs" onclick="closeModal()">إغلاق</button>`,true);
+  try{
+    const{data:movies}=await sb.from('movies').select('id,title,title_ar,poster,type,year,rating').contains('cast_data',[{person_id:id}]).limit(24);
+    const{data:directed}=await sb.from('movies').select('id,title,title_ar,poster,type,year,rating').or(`director_name.eq.${name}`).limit(12);
+    const allWorks=[...(movies||[]),...(directed||[])].filter((v,i,a)=>a.findIndex(x=>x.id===v.id)===i);
+    el('m-body').innerHTML=allWorks.length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px">
+      ${allWorks.map(m=>`<div style="text-align:center;cursor:pointer" onclick="openEditMovie('${m.id}');closeModal()">
+        <img src="${esc(m.poster||'')}" style="width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:6px;background:rgba(255,255,255,.07)" onerror="this.style.background='rgba(255,255,255,.1)'" alt=""/>
+        <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.title_ar||m.title||'—')}</div>
+        <div style="font-size:11px;color:var(--t3)">${m.year||''}</div>
+      </div>`).join('')}</div>`
+    :`<div class="empty"><div class="empty-ic">🎬</div>لا توجد أعمال مرتبطة</div>`;
+  }catch(e){toast(e.message,'error');}
+}
+
+// ═══════════════════════════════════════════════════════
+//  ADS
+// ═══════════════════════════════════════════════════════
+async function renderAds(){
+  const c=el('content');loading('content');
+  try{
+    const{data,error}=await sb.from('ads').select('*').order('created_at',{ascending:false});
+    if(error)throw error;
+    c.innerHTML=`<div class="au">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px">
+        <div class="page-title" style="margin-bottom:0"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--a),var(--a2))"></div>الإعلانات (${(data||[]).length})</div>
+        <button class="btn bp" onclick="openAddAd()">+ إضافة إعلان</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        ${(data||[]).length?(data||[]).map(ad=>`
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div style="width:96px;height:56px;border-radius:9px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center">
+              ${ad.image_url?`<img src="${esc(ad.image_url)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<span style="font-size:24px">${ad.ad_format==='video'?'🎬':ad.ad_format==='interstitial'?'📱':'🖼️'}</span>`}
+            </div>
+            <div style="flex:1;min-width:200px">
+              <div style="font-weight:700;margin-bottom:6px">${esc(ad.title)}</div>
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <span class="badge bb">${ad.ad_format}</span>
+                <span class="badge bgo2">${ad.placement?.replace(/_/g,' ')}</span>
+                <span class="badge bpu2">${ad.ad_size}</span>
+                <span class="badge ${ad.active?'bg2':'br2'}">${ad.active?'نشط':'متوقف'}</span>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,80px);gap:10px;text-align:center">
+              ${[['ظهور',fmt(ad.impressions||0),'var(--t2)'],['نقر',fmt(ad.clicks||0),'var(--gr)'],['CTR',ctr(ad),'var(--go)']].map(([l,v,col])=>`
+              <div><div style="font-size:10.5px;color:var(--t3);margin-bottom:2px">${l}</div><div style="font-size:16px;font-weight:800;color:${col};font-family:var(--fo)">${v}</div></div>`).join('')}
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+              <div class="tgl ${ad.active?'on':''}" onclick="quickToggle('ads','active',${ad.active},'${ad.id}',this)"></div>
+              <button class="btn bs btn-xs" onclick="openEditAd('${ad.id}')">✎</button>
+              <button class="btn br btn-xs" onclick="delAd('${ad.id}')">✕</button>
+            </div>
+          </div>
+        </div>`).join(''):`<div class="empty"><div class="empty-ic">📢</div>${t('noData')}</div>`}
+      </div>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+
+function adFormHTML(ad={}){
+  return `<div class="fg-g">
+    <div class="fg">
+      <div class="f2"><label class="inp-label">عنوان الإعلان (للمرجع) *</label><input class="inp" id="a-title" value="${esc(ad.title||'')}"/></div>
+      <div>
+        <label class="inp-label">نوع الإعلان — <span style="color:var(--t3);font-size:11px;text-transform:none">يحدد طريقة العرض</span></label>
+        <select class="sel" id="a-format">
+          <option value="banner" ${(ad.ad_format||'banner')==='banner'?'selected':''}>🖼️ Banner — صورة ثابتة</option>
+          <option value="video" ${ad.ad_format==='video'?'selected':''}>🎬 Video — مقطع فيديو</option>
+          <option value="interstitial" ${ad.ad_format==='interstitial'?'selected':''}>📱 Interstitial — شاشة كاملة</option>
+          <option value="native" ${ad.ad_format==='native'?'selected':''}>📰 Native — مدمج بالمحتوى</option>
+        </select>
+      </div>
+      <div>
+        <label class="inp-label">موضع العرض — <span style="color:var(--t3);font-size:11px;text-transform:none">أين يظهر</span></label>
+        <select class="sel" id="a-placement">
+          <option value="home_top" ${(ad.placement||'home_top')==='home_top'?'selected':''}>أعلى الرئيسية</option>
+          <option value="movie_player" ${ad.placement==='movie_player'?'selected':''}>مشغل الأفلام</option>
+          <option value="series_player" ${ad.placement==='series_player'?'selected':''}>مشغل المسلسلات</option>
+          <option value="channel_player" ${ad.placement==='channel_player'?'selected':''}>مشغل القنوات</option>
+          <option value="floating" ${ad.placement==='floating'?'selected':''}>عائم (أسفل الشاشة)</option>
+          <option value="sidebar" ${ad.placement==='sidebar'?'selected':''}>الشريط الجانبي</option>
+          <option value="in_content" ${ad.placement==='in_content'?'selected':''}>داخل المحتوى</option>
+        </select>
+      </div>
+      <div>
+        <label class="inp-label">مقاس الإعلان — <span style="color:var(--t3);font-size:11px;text-transform:none">قياسية IAB</span></label>
+        <select class="sel" id="a-size" onchange="toggleCustomSize(this.value)">
+          ${AD_SIZES.map(s=>`<option value="${s}" ${(ad.ad_size||'300x250')===s?'selected':''}>${s}${s==='300x250'?' — Medium Rectangle':s==='728x90'?' — Leaderboard':s==='320x50'?' — Mobile Banner':s==='160x600'?' — Skyscraper':s==='300x600'?' — Half Page':s==='970x250'?' — Billboard':s==='custom'?' — مخصص':''}</option>`).join('')}
+        </select>
+      </div>
+      <div id="custom-size-wrap" style="${(ad.ad_size==='custom')?'':'display:none'};display:flex;gap:8px">
+        <div style="flex:1"><label class="inp-label">العرض (px)</label><input class="inp" id="a-cw" type="number" value="${ad.custom_width||300}" placeholder="300"/></div>
+        <div style="flex:1"><label class="inp-label">الارتفاع (px)</label><input class="inp" id="a-ch" type="number" value="${ad.custom_height||250}" placeholder="250"/></div>
+      </div>
+      <div class="f2"><label class="inp-label">رابط الصورة</label><input class="inp" id="a-img" value="${esc(ad.image_url||'')}" placeholder="https://…" oninput="previewImg('a-img','pv-ad')"/>
+        <div style="margin-top:6px"><img id="pv-ad" src="${ad.image_url||''}" style="height:52px;border-radius:7px;object-fit:cover;${ad.image_url?'':'display:none'}" onerror="this.style.display='none'"/></div>
+      </div>
+      <div class="f2"><label class="inp-label">رابط الفيديو (للإعلانات المرئية)</label><input class="inp" id="a-vid" value="${esc(ad.video_url||'')}" placeholder="https://…"/></div>
+      <div class="f2"><label class="inp-label">رابط الوجهة (عند النقر) *</label><input class="inp" id="a-target" value="${esc(ad.target_url||'')}" placeholder="https://advertiser.com"/></div>
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,.07)"></div>
+    <div style="font-size:13px;color:var(--a);font-weight:700;margin-bottom:12px">⚙️ إعدادات متقدمة</div>
+    <div class="fg">
+      <div>
+        <label class="inp-label">التكرار — <span style="color:var(--t3);font-size:11px;text-transform:none">كم مرة يظهر</span></label>
+        <select class="sel" id="a-freq">
+          <option value="once_per_session" ${(ad.frequency||'once_per_session')==='once_per_session'?'selected':''}>مرة واحدة في الجلسة</option>
+          <option value="once_per_day" ${ad.frequency==='once_per_day'?'selected':''}>مرة واحدة يومياً</option>
+          <option value="every_visit" ${ad.frequency==='every_visit'?'selected':''}>في كل زيارة</option>
+        </select>
+      </div>
+      <div>
+        <label class="inp-label">تخطي بعد (ثانية) — 0 = لا يمكن التخطي</label>
+        <input class="inp" id="a-skip" type="number" min="0" max="60" value="${ad.skip_after_seconds??5}" placeholder="5"/>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid rgba(255,255,255,.07)">
+        <div class="tgl ${ad.force_mute!==false?'on':''}" id="a-mute" onclick="this.classList.toggle('on')"></div>
+        <div><div style="font-size:13px;font-weight:600">كتم الصوت إجبارياً</div><div style="font-size:11px;color:var(--t3)">force_mute</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid rgba(255,255,255,.07)">
+        <div class="tgl ${ad.show_countdown!==false?'on':''}" id="a-countdown" onclick="this.classList.toggle('on')"></div>
+        <div><div style="font-size:13px;font-weight:600">عداد تنازلي للتخطي</div><div style="font-size:11px;color:var(--t3)">show_countdown</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+function toggleCustomSize(v){const w=el('custom-size-wrap');if(w)w.style.display=v==='custom'?'flex':'none';}
+
+function openAddAd(){openModal('+ إضافة إعلان',adFormHTML(),`<button class="btn bp" onclick="saveAd(null)">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`,true);}
+async function openEditAd(id){
+  const{data:ad}=await sb.from('ads').select('*').eq('id',id).single();
+  openModal('تعديل الإعلان',adFormHTML(ad||{}),`<button class="btn bp" onclick="saveAd('${id}')">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`,true);
+}
+async function saveAd(id){
+  const sz=el('a-size')?.value;
+  const data={
+    title:              el('a-title')?.value?.trim(),
+    ad_format:          el('a-format')?.value,
+    placement:          el('a-placement')?.value,
+    ad_size:            sz,
+    custom_width:       sz==='custom'?(+el('a-cw')?.value||null):null,
+    custom_height:      sz==='custom'?(+el('a-ch')?.value||null):null,
+    image_url:          el('a-img')?.value?.trim()||null,
+    video_url:          el('a-vid')?.value?.trim()||null,
+    target_url:         el('a-target')?.value?.trim()||'#',
+    frequency:          el('a-freq')?.value,
+    skip_after_seconds: +el('a-skip')?.value??5,
+    force_mute:         el('a-mute')?.classList.contains('on'),
+    show_countdown:     el('a-countdown')?.classList.contains('on'),
+    active:             true,
+  };
+  if(!data.title){toast('العنوان مطلوب','error');return;}
+  try{
+    if(id){await sb.from('ads').update(data).eq('id',id);}
+    else{await sb.from('ads').insert([{...data,created_at:new Date().toISOString()}]);}
+    toast('تم الحفظ ✓','success');closeModal();renderAds();
+  }catch(e){toast(e.message,'error');}
+}
+async function delAd(id){
+  if(!confirm('حذف الإعلان؟'))return;
+  try{await sb.from('ads').delete().eq('id',id);toast('تم الحذف ✓','success');renderAds();}catch(e){toast(e.message,'error');}
+}
+
+// ═══════════════════════════════════════════════════════
+//  SUBSCRIPTIONS
+// ═══════════════════════════════════════════════════════
+async function renderSubs(){
+  const c=el('content');loading('content');
+  try{
+    const{data,error}=await sb.from('subscriptions').select('*').order('created_at',{ascending:false});
+    if(error)throw error;
+    c.innerHTML=`<div class="au">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px">
+        <div class="page-title" style="margin-bottom:0"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--a),var(--a2))"></div>الاشتراكات (${(data||[]).length})</div>
+        <button class="btn bp" onclick="openAddSub()">+ توليد كود</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        ${(data||[]).length?(data||[]).map(s=>{
+          const expired=isExpired(s.expires_at);
+          const status=!s.active?'معطل':expired?'منتهي':'نشط';
+          const statusClass=!s.active?'br2':expired?'bgo2':'bg2';
+          return `<div class="card">
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+              <div style="flex:1;min-width:220px">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+                  <code style="font-size:17px;font-weight:900;letter-spacing:2.5px;color:var(--a);font-family:monospace;cursor:pointer" onclick="copyText('${s.code}')">${esc(s.code)}</code>
+                  <span class="badge ${statusClass}">${status}</span>
+                </div>
+                <div style="font-size:12.5px;color:var(--t2)">${esc(s.label||'بدون تسمية')}</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,85px);gap:10px;text-align:center">
+                ${[['الأجهزة',`${(s.devices||[]).length}/${s.max_devices}`,'var(--a)'],['ينتهي',s.expires_at?fmtDate(s.expires_at):'∞','var(--go)'],['التاريخ',fmtDate(s.created_at),'var(--t3)']].map(([l,v,col])=>`
+                <div><div style="font-size:10.5px;color:var(--t3)">${l}</div><div style="font-size:12.5px;font-weight:700;color:${col}">${v}</div></div>`).join('')}
+              </div>
+              <div style="display:flex;gap:7px;align-items:center;flex-shrink:0">
+                <div class="tgl ${s.active?'on':''}" onclick="quickToggle('subscriptions','active',${s.active},'${s.id}',this)"></div>
+                <button class="btn bs btn-xs" onclick="openEditSub('${s.id}')">✎</button>
+                <button class="btn bpu btn-xs" onclick="viewSubDevices('${s.id}','${esc(s.code)}')">📱</button>
+                <button class="btn br btn-xs" onclick="delSub('${s.id}')">✕</button>
+              </div>
+            </div>
+          </div>`;
+        }).join(''):`<div class="empty"><div class="empty-ic">🔑</div>${t('noData')}</div>`}
+      </div>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+
+function copyText(t){navigator.clipboard?.writeText(t).then(()=>toast('تم النسخ ✓','success')).catch(()=>{});}
+
+function subFormHTML(s={}){return `<div class="fg-g">
+  <div class="fg">
+    <div class="f2"><label class="inp-label">التسمية (للمرجع الداخلي)</label><input class="inp" id="sub-lb" value="${esc(s.label||'')}" placeholder="مثال: عائلة أحمد"/></div>
+    <div><label class="inp-label">حد الأجهزة *</label><input class="inp" id="sub-max" type="number" min="1" max="50" value="${s.max_devices||1}"/></div>
+    <div><label class="inp-label">تاريخ الانتهاء (اختياري)</label><input class="inp" id="sub-exp" type="datetime-local" value="${s.expires_at?s.expires_at.slice(0,16):''}"/></div>
+  </div>
+  <div class="info-box"><span>💡</span><span>الكود يُولَّد تلقائياً بصيغة SHAH-XXXX-YYYY. المستخدم يدخله في التطبيق لتفعيل الاشتراك عبر بصمة الجهاز. يمكن لعدة أجهزة مشاركة كود واحد حسب الحد المحدد.</span></div>
+</div>`;}
+
+function openAddSub(){openModal('🔑 توليد كود اشتراك',subFormHTML(),`<button class="btn bp" onclick="saveSub(null)">✓ توليد</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`);}
+async function openEditSub(id){
+  const{data:s}=await sb.from('subscriptions').select('*').eq('id',id).single();
+  openModal('تعديل الاشتراك',subFormHTML(s||{}),`<button class="btn bp" onclick="saveSub('${id}')">💾 حفظ</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`);
+}
+async function saveSub(id){
+  const data={label:el('sub-lb')?.value?.trim()||'',max_devices:+el('sub-max')?.value||1,expires_at:el('sub-exp')?.value?new Date(el('sub-exp').value).toISOString():null,updated_at:new Date().toISOString()};
+  try{
+    if(id){await sb.from('subscriptions').update(data).eq('id',id);}
+    else{
+      const a=Math.random().toString(36).slice(2,6).toUpperCase();
+      const b=Math.random().toString(36).slice(2,6).toUpperCase();
+      await sb.from('subscriptions').insert([{...data,code:`SHAH-${a}-${b}`,devices:[],active:true,created_at:new Date().toISOString()}]);
+    }
+    toast('تم ✓','success');closeModal();renderSubs();
+  }catch(e){toast(e.message,'error');}
+}
+async function delSub(id){
+  if(!confirm('حذف الاشتراك؟'))return;
+  try{await sb.from('subscriptions').delete().eq('id',id);toast('تم الحذف ✓','success');renderSubs();}catch(e){toast(e.message,'error');}
+}
+async function viewSubDevices(id,code){
+  openModal(`📱 أجهزة — ${code}`,`<div class="loading"><div class="spin"></div></div>`,`<button class="btn bs" onclick="closeModal()">إغلاق</button>`);
+  try{
+    const{data:s}=await sb.from('subscriptions').select('devices,max_devices').eq('id',id).single();
+    const devs=s?.devices||[];
+    el('m-body').innerHTML=devs.length?`
+      <div style="margin-bottom:14px;color:var(--t3);font-size:13px">${devs.length} / ${s.max_devices} أجهزة مسجلة</div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        ${devs.map((d,i)=>`
+        <div class="card" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:26px;flex-shrink:0">📱</span>
+          <div style="flex:1;overflow:hidden">
+            <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(d.ua||'Unknown')}</div>
+            <div style="font-size:11.5px;color:var(--t3);display:flex;gap:10px;margin-top:2px">
+              <span>سُجِّل: ${fmtDate(d.reg)}</span>
+              <span>آخر ظهور: ${fmtDate(d.seen)}</span>
+            </div>
+          </div>
+          <span style="font-size:11px;color:var(--t3);font-family:monospace;flex-shrink:0">${esc((d.fp||'').slice(0,10))}…</span>
+          <button class="btn br btn-xs" onclick="removeDevice('${id}','${d.fp}',${devs.length})">✕</button>
+        </div>`).join('')}
+      </div>`
+    :`<div class="empty"><div class="empty-ic">📱</div>لا يوجد أجهزة مسجلة</div>`;
+  }catch(e){toast(e.message,'error');}
+}
+async function removeDevice(subId,fp,total){
+  if(!confirm('إزالة هذا الجهاز من الاشتراك؟'))return;
+  try{
+    const{data:s}=await sb.from('subscriptions').select('devices').eq('id',subId).single();
+    const newDevs=(s?.devices||[]).filter(d=>d.fp!==fp);
+    await sb.from('subscriptions').update({devices:newDevs}).eq('id',subId);
+    toast('تم إزالة الجهاز ✓','success');closeModal();renderSubs();
+  }catch(e){toast(e.message,'error');}
+}
+
+// ═══════════════════════════════════════════════════════
+//  TRENDING
+// ═══════════════════════════════════════════════════════
+async function renderTrending(){
+  const c=el('content');loading('content');
+  try{
+    const[{data:cfg},{data:movies}]=await Promise.all([
+      sb.from('settings').select('trending_ids').eq('id',1).single(),
+      sb.from('movies').select('id,title,title_ar,poster,type,views,rating').eq('active',true).order('views',{ascending:false}).limit(50),
+    ]);
+    const trendIds=cfg?.trending_ids||[];
+    window._trendIds=trendIds.slice();
+    window._trendMovies=movies||[];
+    const topAuto=(movies||[]).slice(0,16);
+    c.innerHTML=`<div class="au">
+      <div class="page-title"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--r),var(--go))"></div>🔥 الأكثر رواجاً</div>
+      <div style="font-size:13px;color:var(--t3);margin-bottom:24px">الترتيب التلقائي يعتمد على عدد المشاهدات. يمكنك تجاوزه بتحديد ترتيب يدوي.</div>
+      <div class="card" style="margin-bottom:20px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:14px">📊 أعلى المشاهدات (تلقائي)</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px">
+          ${topAuto.map((m,i)=>`
+          <div style="text-align:center;cursor:pointer;padding:10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);transition:all .2s" onclick="addToTrend('${m.id}')" onmouseenter="this.style.background='rgba(79,143,255,.08)'" onmouseleave="this.style.background='rgba(255,255,255,.04)'">
+            <div style="font-family:var(--fo);font-size:20px;font-weight:900;color:var(--go);margin-bottom:4px">#${i+1}</div>
+            <img src="${esc(m.poster||'')}" style="width:100%;height:110px;object-fit:cover;border-radius:9px;margin-bottom:7px;background:rgba(255,255,255,.07)" loading="lazy" onerror="this.style.background='rgba(255,255,255,.1)'" alt=""/>
+            <div style="font-size:11.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.title_ar||m.title||'—')}</div>
+            <div style="font-size:11px;color:var(--a);margin-top:2px">👁 ${fmt(m.views)}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px">🎯 ترتيب يدوي مخصص</div>
+        <div style="font-size:12.5px;color:var(--t3);margin-bottom:14px">اضغط على المحتوى أعلاه لإضافته. اسحب للترتيب. إذا كان فارغاً، يُستخدم الترتيب التلقائي.</div>
+        <div id="trend-manual-list" style="min-height:80px;background:rgba(79,143,255,.04);border:2px dashed rgba(79,143,255,.18);border-radius:12px;padding:10px;margin-bottom:16px">
+          ${trendIds.length
+            ?(movies||[]).filter(m=>trendIds.includes(m.id)).sort((a,b)=>trendIds.indexOf(a.id)-trendIds.indexOf(b.id)).map((m,i)=>`
+            <div class="trend-item" data-id="${m.id}" draggable="true" ondragstart="dragStart(event)" ondragover="event.preventDefault()" ondrop="dragDrop(event)">
+              <span style="font-family:var(--fo);font-size:18px;font-weight:900;color:var(--go);width:28px">#${i+1}</span>
+              <img src="${esc(m.poster||'')}" style="width:40px;height:58px;border-radius:7px;object-fit:cover;flex-shrink:0" onerror="this.style.background='rgba(255,255,255,.1)'" alt=""/>
+              <div style="flex:1;overflow:hidden"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.title_ar||m.title||'—')}</div></div>
+              <span style="cursor:grab;color:var(--t3);font-size:18px">⠿</span>
+              <button onclick="removeFromTrend('${m.id}')" style="background:rgba(255,95,109,.15);border:1px solid rgba(255,95,109,.25);color:var(--r);border-radius:7px;padding:4px 10px;cursor:pointer;font-size:12px;font-family:var(--f)">✕</button>
+            </div>`).join('')
+            :`<div style="text-align:center;color:var(--t3);padding:20px;font-size:13px">— فارغ —</div>`}
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn bp" onclick="saveTrendOrder()">💾 حفظ الترتيب اليدوي</button>
+          <button class="btn br" onclick="clearTrend()">✕ مسح الترتيب اليدوي</button>
+        </div>
+      </div>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+
+function addToTrend(id){
+  if(!window._trendIds)window._trendIds=[];
+  if(window._trendIds.includes(id)){toast('موجود مسبقاً','warn');return;}
+  if(window._trendIds.length>=20){toast('الحد الأقصى 20 عنصر','warn');return;}
+  window._trendIds.push(id);renderTrending();
+}
+function removeFromTrend(id){window._trendIds=(window._trendIds||[]).filter(x=>x!==id);renderTrending();}
+async function saveTrendOrder(){
+  try{await sb.from('settings').update({trending_ids:window._trendIds||[],updated_at:new Date().toISOString()}).eq('id',1);toast('تم حفظ الترتيب ✓','success');}
+  catch(e){toast(e.message,'error');}
+}
+async function clearTrend(){
+  try{window._trendIds=[];await sb.from('settings').update({trending_ids:[],updated_at:new Date().toISOString()}).eq('id',1);toast('تم مسح الترتيب اليدوي ✓','success');renderTrending();}
+  catch(e){toast(e.message,'error');}
+}
+// Drag & Drop
+let dragSrc=null;
+function dragStart(e){dragSrc=e.currentTarget;e.currentTarget.classList.add('dragging');}
+function dragDrop(e){
+  const target=e.currentTarget;
+  if(dragSrc===target)return;
+  dragSrc?.classList.remove('dragging');
+  const list=el('trend-manual-list');
+  const items=[...list.querySelectorAll('.trend-item')];
+  const srcIdx=items.indexOf(dragSrc);
+  const tgtIdx=items.indexOf(target);
+  if(srcIdx<tgtIdx)list.insertBefore(dragSrc,target.nextSibling);
+  else list.insertBefore(dragSrc,target);
+  window._trendIds=[...list.querySelectorAll('.trend-item')].map(x=>x.dataset.id);
+  items.forEach((el,i)=>{const n=el.querySelector('[style*="font-size:18px"]');if(n)n.textContent=`#${i+1}`;});
+}
+
+// ═══════════════════════════════════════════════════════
+//  BANNED IPS
+// ═══════════════════════════════════════════════════════
+async function renderBanned(){
+  const c=el('content');loading('content');
+  try{
+    const{data,error}=await sb.from('banned_ips').select('*').order('created_at',{ascending:false});
+    if(error)throw error;
+    c.innerHTML=`<div class="au">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px">
+        <div class="page-title" style="margin-bottom:0"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--r),#ff8e53)"></div>🚫 حظر الـ IP (${(data||[]).length})</div>
+        <button class="btn br" onclick="openAddBan()">+ حظر IP جديد</button>
+      </div>
+      <div class="danger-box" style="margin-bottom:20px"><span>⚠️</span><span>المستخدمون ذوو عناوين IP المحظورة لن يتمكنوا من تحميل أي محتوى في التطبيق.</span></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>عنوان الـ IP</th><th>السبب</th><th>تاريخ الحظر</th><th></th></tr></thead>
+        <tbody>${(data||[]).length?(data||[]).map(b=>`<tr>
+          <td><code style="font-family:monospace;color:var(--r);font-size:14px;font-weight:700">${esc(b.ip_address)}</code></td>
+          <td style="color:var(--t2)">${esc(b.reason||'—')}</td>
+          <td style="color:var(--t3)">${fmtDate(b.created_at)}</td>
+          <td><button class="btn bg btn-xs" onclick="unbanIp('${esc(b.ip_address)}')">✓ رفع الحظر</button></td>
+        </tr>`).join(''):`<tr><td colspan="4"><div class="empty"><div class="empty-ic">🚫</div>لا يوجد عناوين محظورة</div></td></tr>`}
+        </tbody>
+      </table></div>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+function openAddBan(){
+  openModal('🚫 حظر IP',`<div class="fg-g">
+    <div><label class="inp-label">عنوان الـ IP *</label><input class="inp" id="ban-ip" placeholder="مثال: 192.168.1.1" dir="ltr"/></div>
+    <div><label class="inp-label">سبب الحظر (اختياري)</label><input class="inp" id="ban-reason" placeholder="مثال: محاولات تجاوز الاشتراك"/></div>
+  </div>`,`<button class="btn br" onclick="addBan()">🚫 حظر</button><button class="btn bs" onclick="closeModal()">إلغاء</button>`);
+}
+async function addBan(){
+  const ip=el('ban-ip')?.value?.trim();const reason=el('ban-reason')?.value?.trim();
+  if(!ip){toast('عنوان الـ IP مطلوب','error');return;}
+  try{await sb.from('banned_ips').insert([{ip_address:ip,reason,created_at:new Date().toISOString()}]);toast('تم الحظر ✓','success');closeModal();renderBanned();}catch(e){toast(e.message,'error');}
+}
+async function unbanIp(ip){
+  if(!confirm(`رفع حظر ${ip}؟`))return;
+  try{await sb.from('banned_ips').delete().eq('ip_address',ip);toast('تم رفع الحظر ✓','success');renderBanned();}catch(e){toast(e.message,'error');}
+}
+
+// ═══════════════════════════════════════════════════════
+//  DOWNLOADS SETTINGS
+// ═══════════════════════════════════════════════════════
+async function renderDownloads(){
+  const c=el('content');loading('content');
+  try{
+    const{data:cfg}=await sb.from('settings').select('downloads_enabled,quality_profiles,allowed_codecs').eq('id',1).single();
+    const qp=cfg?.quality_profiles||['4K','1080p','720p','480p','360p'];
+    const codecs=cfg?.allowed_codecs||['H.264','H.265/HEVC','VP9','AV1'];
+    c.innerHTML=`<div class="au" style="max-width:700px">
+      <div class="page-title"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--a),var(--a2))"></div>⬇️ إعدادات التحميل</div>
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-weight:700;font-size:14px;margin-bottom:3px">تفعيل التحميل بدون اتصال</div>
+            <div style="font-size:13px;color:var(--t3)">يتيح للمستخدمين تحميل الأفلام والحلقات للمشاهدة دون إنترنت.</div>
+          </div>
+          <div class="tgl ${cfg?.downloads_enabled?'on':''}" id="dl-enabled" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">جودات التحميل والبث المتاحة</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="qp-list">
+          ${['4K','1080p','720p','480p','360p','240p'].map(q=>`
+          <label style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,255,255,.05);border-radius:10px;border:1px solid rgba(255,255,255,.1);cursor:pointer">
+            <input type="checkbox" id="qp-${q}" ${qp.includes(q)?'checked':''} style="accent-color:var(--a);width:14px;height:14px;cursor:pointer"/>
+            <span style="font-size:13px;font-weight:600">${q}</span>
+          </label>`).join('')}
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:24px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">الترميزات (Codecs) المسموح بها</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          ${['H.264','H.265/HEVC','VP9','AV1'].map(cc=>`
+          <label style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,255,255,.05);border-radius:10px;border:1px solid rgba(255,255,255,.1);cursor:pointer">
+            <input type="checkbox" id="codec-${cc.replace('/','_')}" ${codecs.includes(cc)?'checked':''} style="accent-color:var(--a);width:14px;height:14px;cursor:pointer"/>
+            <span style="font-size:13px;font-weight:600">${cc}</span>
+          </label>`).join('')}
+        </div>
+      </div>
+      <button class="btn bp" style="padding:12px 32px;font-size:15px" onclick="saveDownloadSettings()">💾 حفظ إعدادات التحميل</button>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+async function saveDownloadSettings(){
+  const qp=['4K','1080p','720p','480p','360p','240p'].filter(q=>el(`qp-${q}`)?.checked);
+  const codecs=['H.264','H.265/HEVC','VP9','AV1'].filter(c=>el(`codec-${c.replace('/','_')}`)?.checked);
+  try{
+    await sb.from('settings').update({downloads_enabled:el('dl-enabled')?.classList.contains('on'),quality_profiles:qp,allowed_codecs:codecs,updated_at:new Date().toISOString()}).eq('id',1);
+    toast('تم حفظ إعدادات التحميل ✓','success');
+  }catch(e){toast(e.message,'error');}
+}
+
+// ═══════════════════════════════════════════════════════
+//  SETTINGS
+// ═══════════════════════════════════════════════════════
+async function renderSettings(){
+  const c=el('content');loading('content');
+  try{
+    const{data:cfg}=await sb.from('settings').select('*').eq('id',1).single();
+    c.innerHTML=`<div class="au" style="max-width:700px">
+      <div class="page-title"><div class="sec-bar" style="height:26px;background:linear-gradient(180deg,var(--a),var(--a2))"></div>⚙️ إعدادات الموقع</div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:14px">🌐 هوية الموقع</div>
+        <div class="fg">
+          <div><label class="inp-label">اسم الموقع (عربي)</label><input class="inp" id="cfg-title_ar" value="${esc(cfg?.site_title_ar||'شاهد 365')}"/></div>
+          <div><label class="inp-label">اسم الموقع (إنجليزي)</label><input class="inp" id="cfg-title" value="${esc(cfg?.site_title||'Shahid365')}"/></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div><div style="font-weight:700;font-size:14px;margin-bottom:3px">🔧 وضع الصيانة</div>
+            <div style="font-size:13px;color:var(--t3)">يوجّه جميع الزوار لصفحة الصيانة. الأدمن غير متأثر.</div></div>
+          <div class="tgl ${cfg?.maintenance_on?'on':''}" id="cfg-maint" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="fg">
+          <div><label class="inp-label">رسالة الصيانة (إنجليزي)</label><textarea class="inp" id="cfg-maint-msg" rows="2">${esc(cfg?.maintenance_msg||'')}</textarea></div>
+          <div><label class="inp-label">رسالة الصيانة (عربي)</label><textarea class="inp" id="cfg-maint-ar" rows="2">${esc(cfg?.maintenance_msg_ar||'')}</textarea></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div><div style="font-weight:700;font-size:14px">🔐 بوابة الاشتراك</div>
+            <div style="font-size:13px;color:var(--t3)">يطلب من الزوار إدخال كود اشتراك للوصول للمحتوى.</div></div>
+          <div class="tgl ${cfg?.sub_required?'on':''}" id="cfg-sub" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div><div style="font-weight:700;font-size:14px">📢 تفعيل الإعلانات</div>
+            <div style="font-size:13px;color:var(--t3)">تشغيل/إيقاف جميع الإعلانات على المنصة.</div></div>
+          <div class="tgl ${cfg?.ads_enabled!==false?'on':''}" id="cfg-ads" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+
+      <button class="btn bp" style="padding:13px 36px;font-size:15px" id="cfg-save-btn" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+    </div>`;
+  }catch(e){el('content').innerHTML=`<div class="empty"><div class="empty-ic">⚠️</div>${e.message}</div>`;}
+}
+async function saveSettings(){
+  const btn=el('cfg-save-btn');setLoading(btn,true,'جارٍ الحفظ…');
+  try{
+    await sb.from('settings').update({
+      site_title_ar:       el('cfg-title_ar')?.value?.trim(),
+      site_title:          el('cfg-title')?.value?.trim(),
+      maintenance_on:      el('cfg-maint')?.classList.contains('on'),
+      maintenance_msg:     el('cfg-maint-msg')?.value?.trim(),
+      maintenance_msg_ar:  el('cfg-maint-ar')?.value?.trim(),
+      sub_required:        el('cfg-sub')?.classList.contains('on'),
+      ads_enabled:         el('cfg-ads')?.classList.contains('on'),
+      updated_at:          new Date().toISOString(),
+    }).eq('id',1);
+    toast('تم حفظ الإعدادات ✓','success');
+  }catch(e){toast(e.message,'error');}
+  setLoading(btn,false,'💾 حفظ الإعدادات');
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  S.lang=localStorage.getItem('s365a_lang')||'ar';
+  applyLang();
+  if(isAuthed()){
+    el('login-screen').style.display='none';
+    el('app-wrap').style.display='flex';
+    loadSettings();
+    nav('dashboard');
+  }
+  el('l-user').focus();
+});
+</script>
+</body>
+</html>
